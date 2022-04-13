@@ -1,0 +1,45 @@
+<template>
+    <input class="input-section" :type="typeName" :placeholder="placeHolder"
+            @change="onChange">
+</template>
+
+<script lang="ts">
+// import Vue from 'vue'
+export default {
+    props:{
+        extraClassName:{
+            type: String,
+            default: "",
+        },
+        typeName:{
+            type: String,
+            default: "text",
+        },
+        placeHolder:{
+            type: String,
+            default: "",
+        },
+        
+        onChange:{
+            type: Function,
+            default: () => {
+                console.log("This is input ");
+            },
+        },
+    }
+}
+
+</script>
+
+<style lang="scss">
+@tailwind components;
+
+@layer components{
+    body{
+        .input-section{
+            @apply w-full shadow-lg border-black focus:text-red-500 appearance-none border rounded-md py-2 px-3 mr-4;
+        }
+
+    }
+}
+</style>
