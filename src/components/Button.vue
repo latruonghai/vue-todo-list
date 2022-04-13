@@ -33,7 +33,16 @@
             @apply flex-shrink-0 p-2 border-black bg-blue-400 text-black rounded-md cursor-pointer;
         }
         .add{
-            @apply text-teal-300 border-teal-400 hover:text-teal-400 hover:border-teal-600 bg-white;
+            @apply text-teal-300 border-teal-400 hover:text-teal-400 
+            hover:border-teal-600 bg-white;
+        }
+        .edit{
+            @apply border-green-500 text-green-400 hover:border-green-600
+            hover:text-white bg-white hover:font-bold hover:bg-green-600 ml-4 mr-2;
+        }
+        .done{
+            @apply border-red-500 bg-white text-red-500 hover:font-bold
+            hover:border-red-600 hover:bg-red-500 hover:text-white hover:shadow-lg;
         }
     }
 }

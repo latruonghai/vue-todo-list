@@ -8,6 +8,9 @@
                     <Input placeHolder="Add Todo"/>
                     <Button contentButton="Add" :extraClassName="'add'"></Button>
                 </div>
+                <div class="cart-section" v-for="item in [1, 2, 3]" :key="item" >
+                    <Cart :itemContent="`${item} Todo List`"/>
+                </div>
             </div>
         </div>
     </div>
@@ -19,12 +22,16 @@ import { ref } from 'vue';
 // import component from '../env';
 import Button from '../components/Button.vue';
 import Input from './Input.vue';
+import Cart from './Cart.vue';
+
 export default {
     name:"TodoList",
     components:{
-    Button,
-    Input
-},
+        Button,
+        Input,
+        Cart
+    
+    },
     props: {
         msg: {
             type: String,
@@ -85,7 +92,11 @@ export default {
             &-button{
                 @apply ml-2 rounded-xl bg-white border-teal-400 text-teal-600 cursor-pointer flex-shrink-0 p-2 hover:text-teal-800 hover:border-teal-600;
             }
+        }
+        .cart-section{
+            @apply m-4 flex-row shadow-lg;
         }    
     }
+
 }
 </style> !==
