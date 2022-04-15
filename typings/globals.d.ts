@@ -1,10 +1,13 @@
 export interface TodoListItem{
-    todoWoks: string;
+    todoWorks: string;
     numOfWorks?: number;
     done?: boolean;
 }
 
 export interface TodoListItemArray{
-    todoListArray: TodoListItem[]
+    todoListArray: TodoListItem[],
+    currentItem: TodoListItem
 }
+
+
 export type StateGlobal =  TodoListItem | TodoListItemArray| null;

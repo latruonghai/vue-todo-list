@@ -40,7 +40,7 @@
             @apply border-green-500 text-green-400 hover:border-green-600
             hover:text-white bg-white hover:font-bold hover:bg-green-600 ml-4 mr-2;
         }
-        .done{
+        .remove{
             @apply border-red-500 bg-white text-red-500 hover:font-bold
             hover:border-red-600 hover:bg-red-500 hover:text-white hover:shadow-lg;
         }

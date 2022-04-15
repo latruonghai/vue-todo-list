@@ -4,7 +4,7 @@
 // import HelloWorld from './components/HelloWorld.vue';
 import TodoList from './components/TodoList.vue';
 // import component from './env';
-import {methods, state} from './store';
+// import {methods, state} from './store';
 import { provide } from 'vue';
 // import TodoList from './components/TodoList.vue';
 export default {
@@ -12,7 +12,7 @@ export default {
     TodoList,
   },
   setup(){
-    provide("store", {methods, state});
+    // provide("store", {methods, state});
   }
 }
 </script>
@@ -20,7 +20,7 @@ export default {
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
   <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-  <todo-list :itemArray="store.state.todoListArray" />
+  <todo-list />
 </template>
 
 <style>

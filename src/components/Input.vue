@@ -1,5 +1,5 @@
 <template>
-    <input class="input-section" :type="typeName" :placeholder="placeHolder"
+    <input :id="idName" class="input-section" :type="typeName" :placeholder="placeHolder"
             @change="onChange">
 </template>
 
@@ -26,6 +26,12 @@ export default {
                 console.log("This is input ");
             },
         },
+        idName:{
+            type: String,
+            default: "",
+        },
+
+        
     }
 }
 

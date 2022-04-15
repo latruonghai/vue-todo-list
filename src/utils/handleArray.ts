@@ -15,3 +15,9 @@ export function numberOfExistObjectElement(elements: any[], el: any, properties:
         return o[properties] === el;
     }).length;
 }
+
+export function findItem(elements: any[], el: any, properties: string){
+    return _.find(elements, (o) =>{
+        return o[properties] === el;
+    });
+}

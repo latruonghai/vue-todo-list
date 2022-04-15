@@ -1,13 +1,21 @@
 <template>
-    <div class="cart-item">
-        <p class="cart-content">{{itemContent}}</p>
-        <Button contentButton="Edit" :extraClassName="'edit'"></Button>
-        <Button contentButton="Remove" :extraClassName="'done'"></Button>
+    <div :id="`cart-${order}`" class="cart-item">
+        <!-- <input :type="'checkbox'" v-model="getStatus" @change="
+        "/> -->
+        <p v-if="!done" class="cart-content">{{itemContent}}</p>
+        <p v-else  class="cart-content done" >{{itemContent}}</p>
+
+        <Button :contentButton="done?'Not Done':'Done'" :extraClassName="'edit'" :onClickHandler="setDoneItemHandler" ></Button>
+        <Button contentButton="Remove" :extraClassName="'remove'" :onClickHandler="removeItemHandler"></Button>
     </div>
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia';
+import useTodoList from '../store/todolistItem';
 import Button from "./Button.vue"
+import Input from './Input.vue';
+import { TodoListItem } from '../../typings/globals';
 export default {
     props:{
         itemContent: { 
@@ -20,11 +28,33 @@ export default {
         },
         done:{
             type: Boolean,
-            default: false,
+            default: true,
         },
+        order: Number,
     },
     components:{
-        Button
+        Button,
+        Input
+    },
+    setup(props: any){
+
+
+        const todoListStore = useTodoList();
+        const {removeTodoItem,setDoneItem} = todoListStore;
+        const removeItemHandler = () =>{
+            const item = todoListStore.todoListArray[props.order as number];
+            // console.log("Remove item", item);
+            removeTodoItem(item);
+        }
+        const setDoneItemHandler = () =>{
+            const item = todoListStore.todoListArray[props.order as number];
+            // console.log("Set done item", item);
+            setDoneItem(item);
+        }
+        return{
+            removeItemHandler,
+            setDoneItemHandler
+        }
     }
 }
 </script>
@@ -42,6 +72,9 @@ export default {
                 @apply w-full text-gray-600 text-left font-mono; 
             }
 
+        }
+        .done{
+            @apply line-through text-red-500;
         }
     }
 }

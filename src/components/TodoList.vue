@@ -5,11 +5,11 @@
             <div class="todo-list-content">
                 <h1 class="todo-list-title">Todo List</h1>
                 <div class="todo-list-input-section">
-                    <Input placeHolder="Add Todo"/>
-                    <Button  contentButton="Add" :extraClassName="'add'"></Button>
+                    <Input :idName="'todo-item-content'" placeHolder="Add Todo"/>
+                    <Button  contentButton="Add" :extraClassName="'add'" :onClickHandler="addTodoHandler"></Button>
                 </div>
-                <div class="cart-section" v-for="(item, index) in itemArray" :key="index" >
-                    <Cart :itemContent="`${item.todoWoks}`"/>
+                <div class="cart-section" v-for="(item, index) in stateTodoList.$state.todoListArray" :key="index" >
+                    <Cart :itemContent="`${item.numOfWorks}. ${item.todoWorks}`" :done="item.done" :order="index"/>
                 </div>
             </div>
         </div>
@@ -24,6 +24,7 @@ import Button from '../components/Button.vue';
 import Input from './Input.vue';
 import Cart from './Cart.vue';
 import { TodoListItem } from '../../typings/globals';
+import useTodoList from '../store/todolistItem';
 import { numberOfExistElement, numberOfExistObjectElement } from '../utils/handleArray';
 
 export default defineComponent({
@@ -41,7 +42,27 @@ export default defineComponent({
         },
     },
     setup(props){
+        const stateTodoList = useTodoList();
+        const { addTodoItem } = stateTodoList;
+        // const { addTodo, removeTodo } = úe;
+        const addTodoHandler = () =>{
+            const elementInput = document.getElementById("todo-item-content") as HTMLInputElement;
+            const content: string = elementInput!.value;
+            elementInput.value = "";
+            // console.log("Content", content);
+            if(content.length>0){
+                const item: TodoListItem = {
+                    todoWorks: content,
+                    done: false,
+                }
+                addTodoItem(item);
+            }
+        }
         
+        return {
+            stateTodoList,
+            addTodoHandler,
+        }
     },
     
 });
