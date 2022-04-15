@@ -6,10 +6,10 @@
                 <h1 class="todo-list-title">Todo List</h1>
                 <div class="todo-list-input-section">
                     <Input placeHolder="Add Todo"/>
-                    <Button contentButton="Add" :extraClassName="'add'"></Button>
+                    <Button  contentButton="Add" :extraClassName="'add'"></Button>
                 </div>
-                <div class="cart-section" v-for="item in [1, 2, 3]" :key="item" >
-                    <Cart :itemContent="`${item} Todo List`"/>
+                <div class="cart-section" v-for="(item, index) in itemArray" :key="index" >
+                    <Cart :itemContent="`${item.todoWoks}`"/>
                 </div>
             </div>
         </div>
@@ -18,13 +18,15 @@
 
 <script lang="ts">
 // import Vue from 'vue';
-import { ref } from 'vue';
+import { computed, defineComponent, inject, PropType } from 'vue';
 // import component from '../env';
 import Button from '../components/Button.vue';
 import Input from './Input.vue';
 import Cart from './Cart.vue';
+import { TodoListItem } from '../../typings/globals';
+import { numberOfExistElement, numberOfExistObjectElement } from '../utils/handleArray';
 
-export default {
+export default defineComponent({
     name:"TodoList",
     components:{
         Button,
@@ -33,36 +35,16 @@ export default {
     
     },
     props: {
-        msg: {
-            type: String,
-            // required: true,
-            default: 'Hello Vue 3 + TypeScript + Vite',
-            validation(value: string){
-                console.log(value.length>0);
-                return value.length > 0;
-            }
+        itemArray: {
+            type: Array as PropType<TodoListItem[]>,
+            default: () => [],
         },
     },
-    setup(){
-        const count = ref(0);
-        // const onClickHandler = () => {
-        //     count.value++;
-        // }
-        return {
-            count,
-            // onClickHandler
-        }
+    setup(props){
+        
     },
-    methods: {
-        onClickHandler(){
-            this.count++;
-        }
-    }
     
-    
-    
-    
-}
+});
 </script>
 <style lang="scss" >
 // /* @tailwind base; */

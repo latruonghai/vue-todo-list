@@ -10,7 +10,7 @@
 import Button from "./Button.vue"
 export default {
     props:{
-        itemContent: {
+        itemContent: { 
             type: String,
             default: "Todo",
             validation(value: string){
