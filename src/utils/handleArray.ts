@@ -1,7 +1,10 @@
+import { TodoListItem } from './../../typings/globals.d';
 import _ from "lodash";
 
-export function checkExistElement(elements: any, element: any) {
-    return _.includes(elements, element);
+export function checkExistElement(elements: any, elementContent: string, properties: string) {
+    return _.filter(elements, (o: any) => {
+			return o[properties] === elementContent;
+		}).length != 0 ;
 }
 
 export function numberOfExistElement(elements: any[], el: any){
@@ -9,9 +12,14 @@ export function numberOfExistElement(elements: any[], el: any){
         return o === el;
     }).length;
 }
-
-export function numberOfExistObjectElement(elements: any[], el: any, properties: string ){
-    return _.filter(elements, (o) =>{
+export function findExistElementByProperties(elements: any[], elementContent: string, properties: string) {
+    return _.find(elements, (o: any) => {
+        return o[properties] === elementContent;   
+    });
+}
+export function numberOfExistObjectElement(elements: TodoListItem[], el: string, properties: string ){
+    return _.filter(elements, (o: any) =>{
+        console.log("o ", o);
         return o[properties] === el;
     }).length;
 }

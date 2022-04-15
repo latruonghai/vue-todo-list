@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { TodoListItem, TodoListItemArray } from "../../typings/globals";
+import { checkExistElement, findExistElementByProperties } from '../utils/handleArray';
 
 const useTodoList = defineStore("todoListItem",{
     state: ():TodoListItemArray => {
@@ -26,7 +27,20 @@ const useTodoList = defineStore("todoListItem",{
     },
     actions: {
         addTodoItem(todoItem: TodoListItem): void {
-            this.todoListArray.push(todoItem);
+            const todoWorks = todoItem.todoWorks;
+            if (!checkExistElement(this.todoListArray, todoWorks, "todoWorks")) {
+                this.todoListArray.push(todoItem);
+            }
+            else{
+                const item = findExistElementByProperties(
+                    this.todoListArray, 
+                    todoWorks, 
+                    "todoWorks");
+                console.log("item ", item);
+                item.numOfWorks += 1;
+
+            }
+            
         },
         removeTodoItem(todoItem: TodoListItem): void {
             this.todoListArray.splice(this.todoListArray.indexOf(todoItem), 1);

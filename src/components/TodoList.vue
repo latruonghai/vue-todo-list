@@ -54,6 +54,8 @@ export default defineComponent({
                 const item: TodoListItem = {
                     todoWorks: content,
                     done: false,
+                    numOfWorks: numberOfExistObjectElement(stateTodoList.todoListArray, 
+                    content, "todoWorks") + 1,
                 }
                 addTodoItem(item);
             }
