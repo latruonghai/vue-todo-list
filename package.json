@@ -8,7 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "immer": "^9.0.12",
     "lodash": "^4.17.21",
+    "moment": "^2.29.2",
     "pinia": "^2.0.13",
     "vue": "^3.2.25"
   },

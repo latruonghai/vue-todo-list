@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { TodoListItem, TodoListItemArray } from "../../typings/globals";
 import { checkExistElement, findExistElementByProperties } from '../utils/handleArray';
+import { getToday, convertDayToNumber, dayFrom } from '../utils/handleDate';
 
 const useTodoList = defineStore("todoListItem",{
     state: ():TodoListItemArray => {
@@ -9,7 +10,8 @@ const useTodoList = defineStore("todoListItem",{
                 {
                     todoWorks: "Hello",
                     numOfWorks: 1,
-                    done: true
+                    done: true,
+                    dayCreated: getToday()
                 }
             ],
             currentItem: {

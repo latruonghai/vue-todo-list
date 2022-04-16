@@ -1,5 +1,6 @@
 import { TodoListItem } from './../../typings/globals.d';
 import _ from "lodash";
+import produce from 'immer';
 
 export function checkExistElement(elements: any, elementContent: string, properties: string) {
     return _.filter(elements, (o: any) => {
@@ -28,4 +29,9 @@ export function findItem(elements: any[], el: any, properties: string){
     return _.find(elements, (o) =>{
         return o[properties] === el;
     });
+}
+
+export function reverseArray(arr: any[]): void{
+    // console.log("arr", arr);
+    _.reverse(arr);
 }

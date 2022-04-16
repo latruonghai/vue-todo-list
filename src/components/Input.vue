@@ -1,6 +1,6 @@
 <template>
     <input :id="idName" class="input-section" :type="typeName" :placeholder="placeHolder"
-            @change="onChange">
+            @change="(e) => onChange(e)">
 </template>
 
 <script lang="ts">
@@ -22,7 +22,7 @@ export default {
         
         onChange:{
             type: Function,
-            default: () => {
+            default: (event: any) => {
                 console.log("This is input ");
             },
         },

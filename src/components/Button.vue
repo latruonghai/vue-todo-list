@@ -1,5 +1,5 @@
 <template>
-    <button @click="onClickHandler" :class="'btn ' + extraClassName">{{contentButton}}</button>
+    <button @click="(e) => {onClickHandler()}" :class="'btn ' + extraClassName">{{contentButton}}</button>
 </template>
 
 <script lang="ts">

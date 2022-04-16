@@ -8,8 +8,8 @@
                     <Input :idName="'todo-item-content'" placeHolder="Add Todo"/>
                     <Button  contentButton="Add" :extraClassName="'add'" :onClickHandler="addTodoHandler"></Button>
                 </div>
-                <div class="cart-section" v-for="(item, index) in stateTodoList.$state.todoListArray" :key="index" >
-                    <Cart :itemContent="`${item.numOfWorks}. ${item.todoWorks}`" :done="item.done" :order="index"/>
+                <div class="cart-section" v-for="(item, index) in arrayCart" :key="index" >
+                    <Cart :itemContent="item" :done="item.done" :order="index"/>
                 </div>
             </div>
         </div>
@@ -25,7 +25,11 @@ import Input from './Input.vue';
 import Cart from './Cart.vue';
 import { TodoListItem } from '../../typings/globals';
 import useTodoList from '../store/todolistItem';
-import { numberOfExistElement, numberOfExistObjectElement } from '../utils/handleArray';
+import { numberOfExistElement, numberOfExistObjectElement, reverseArray } from '../utils/handleArray';
+import { getToday } from '../utils/handleDate';
+import produce from 'immer';
+import { storeToRefs } from 'pinia';
+
 
 export default defineComponent({
     name:"TodoList",
@@ -41,9 +45,20 @@ export default defineComponent({
             default: () => [],
         },
     },
-    setup(props){
+    setup(){
         const stateTodoList = useTodoList();
         const { addTodoItem } = stateTodoList;
+        // console.log("TodoList props", stateTodoList.todoListArray);
+        // const {todoListArray} = storeToRefs(stateTodoList);
+        const arrayCart = computed(
+            () =>{
+                console.log("TodoList arrayCart", stateTodoList.todoListArray);
+                const arr = [...stateTodoList.todoListArray];
+                reverseArray(arr);
+                return arr;
+            }
+        );
+        // console.log("array Cart ", arrayCart.value);
         // const { addTodo, removeTodo } = úe;
         const addTodoHandler = () =>{
             const elementInput = document.getElementById("todo-item-content") as HTMLInputElement;
@@ -56,6 +71,7 @@ export default defineComponent({
                     done: false,
                     numOfWorks: numberOfExistObjectElement(stateTodoList.todoListArray, 
                     content, "todoWorks") + 1,
+                    dayCreated: getToday()
                 }
                 addTodoItem(item);
             }
@@ -64,6 +80,7 @@ export default defineComponent({
         return {
             stateTodoList,
             addTodoHandler,
+            arrayCart
         }
     },
     
@@ -99,7 +116,7 @@ export default defineComponent({
             }
         }
         .cart-section{
-            @apply m-4 flex-row shadow-lg;
+            @apply m-4 flex-col shadow-lg;
         }    
     }
 

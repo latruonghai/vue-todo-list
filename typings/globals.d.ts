@@ -2,6 +2,7 @@ export interface TodoListItem{
     todoWorks: string;
     numOfWorks?: number;
     done?: boolean;
+    dayCreated?: string;
 }
 
 export interface TodoListItemArray{
