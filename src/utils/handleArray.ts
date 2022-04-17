@@ -1,37 +1,50 @@
 import { TodoListItem } from './../../typings/globals.d';
-import _ from "lodash";
-import produce from 'immer';
+import _ from 'lodash';
 
-export function checkExistElement(elements: any, elementContent: string, properties: string) {
-    return _.filter(elements, (o: any) => {
-			return o[properties] === elementContent;
-		}).length != 0 ;
+export function checkExistElement(
+    elements: any,
+    elementContent: string,
+    properties: string
+) {
+    return (
+        _.filter(elements, (o: any) => {
+            return o[properties] === elementContent;
+        }).length != 0
+    );
 }
 
-export function numberOfExistElement(elements: any[], el: any){
-    return _.filter(elements, (o) =>{
+export function numberOfExistElement(elements: any[], el: any) {
+    return _.filter(elements, (o) => {
         return o === el;
     }).length;
 }
-export function findExistElementByProperties(elements: any[], elementContent: string, properties: string) {
+export function findExistElementByProperties(
+    elements: any[],
+    elementContent: string,
+    properties: string
+) {
     return _.find(elements, (o: any) => {
-        return o[properties] === elementContent;   
+        return o[properties] === elementContent;
     });
 }
-export function numberOfExistObjectElement(elements: TodoListItem[], el: string, properties: string ){
-    return _.filter(elements, (o: any) =>{
-        console.log("o ", o);
+export function numberOfExistObjectElement(
+    elements: TodoListItem[],
+    el: string,
+    properties: string
+) {
+    return _.filter(elements, (o: any) => {
+        console.log('o ', o);
         return o[properties] === el;
     }).length;
 }
 
-export function findItem(elements: any[], el: any, properties: string){
-    return _.find(elements, (o) =>{
+export function findItem(elements: any[], el: any, properties: string) {
+    return _.find(elements, (o) => {
         return o[properties] === el;
     });
 }
 
-export function reverseArray(arr: any[]): void{
+export function reverseArray(arr: any[]): void {
     // console.log("arr", arr);
     _.reverse(arr);
 }

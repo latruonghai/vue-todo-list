@@ -1,15 +1,33 @@
-
 <template>
     <div class="todo-list-form">
         <div class="todo-list-section">
             <div class="todo-list-content">
                 <h1 class="todo-list-title">Todo List</h1>
                 <div class="todo-list-input-section">
-                    <Input :idName="'todo-item-content'" placeHolder="Add Todo"/>
-                    <Button  contentButton="Add" :extraClassName="'add'" :onClickHandler="addTodoHandler"></Button>
+                    <Input
+                        :idName="'todo-item-content'"
+                        placeHolder="Add Todo"
+                    />
+                    <Input
+                        typeName="date"
+                        idName="todo-item-date"
+                    />
+                    <Button
+                        contentButton="Add"
+                        :extraClassName="'add'"
+                        :onClickHandler="addTodoHandler"
+                    ></Button>
                 </div>
-                <div class="cart-section" v-for="(item, index) in arrayCart" :key="index" >
-                    <Cart :itemContent="item" :done="item.done" :order="index"/>
+                <div
+                    class="cart-section"
+                    v-for="(item, index) in arrayCart"
+                    :key="index"
+                >
+                    <Cart
+                        :itemContent="item"
+                        :done="item.done"
+                        :order="todoListArrayLength - index"
+                    />
                 </div>
             </div>
         </div>
@@ -17,108 +35,109 @@
 </template>
 
 <script lang="ts">
-// import Vue from 'vue';
-import { computed, defineComponent, inject, PropType } from 'vue';
-// import component from '../env';
+import { computed, defineComponent, PropType } from 'vue';
 import Button from '../components/Button.vue';
 import Input from './Input.vue';
 import Cart from './Cart.vue';
 import { TodoListItem } from '../../typings/globals';
 import useTodoList from '../store/todolistItem';
-import { numberOfExistElement, numberOfExistObjectElement, reverseArray } from '../utils/handleArray';
-import { getToday } from '../utils/handleDate';
-import produce from 'immer';
-import { storeToRefs } from 'pinia';
-
+import { numberOfExistObjectElement, reverseArray } from '../utils/handleArray';
+import { getToday, normalizeDate } from '../utils/handleDate';
+import { standardizeString } from '../utils/handleString';
+import { getElementInputContent } from '../utils/handleDOM';
 
 export default defineComponent({
-    name:"TodoList",
-    components:{
+    name: 'TodoList',
+    components: {
         Button,
         Input,
         Cart
-    
     },
     props: {
         itemArray: {
             type: Array as PropType<TodoListItem[]>,
-            default: () => [],
-        },
+            default: () => []
+        }
     },
-    setup(){
+    setup() {
         const stateTodoList = useTodoList();
         const { addTodoItem } = stateTodoList;
-        // console.log("TodoList props", stateTodoList.todoListArray);
-        // const {todoListArray} = storeToRefs(stateTodoList);
-        const arrayCart = computed(
-            () =>{
-                console.log("TodoList arrayCart", stateTodoList.todoListArray);
-                const arr = [...stateTodoList.todoListArray];
-                reverseArray(arr);
-                return arr;
-            }
-        );
-        // console.log("array Cart ", arrayCart.value);
-        // const { addTodo, removeTodo } = úe;
-        const addTodoHandler = () =>{
-            const elementInput = document.getElementById("todo-item-content") as HTMLInputElement;
-            const content: string = elementInput!.value;
-            elementInput.value = "";
-            // console.log("Content", content);
-            if(content.length>0){
+        const arrayCart = computed(() => {
+            console.log('TodoList arrayCart', stateTodoList.todoListArray);
+            const arr = [...stateTodoList.todoListArray];
+            reverseArray(arr);
+            return arr;
+        });
+
+        const addTodoHandler = () => {
+            const content = getElementInputContent('todo-item-content');
+            const dateValueContent = getElementInputContent('todo-item-date');
+
+            if (content.length > 0) {
                 const item: TodoListItem = {
-                    todoWorks: content,
+                    todoWorks: standardizeString(content),
                     done: false,
-                    numOfWorks: numberOfExistObjectElement(stateTodoList.todoListArray, 
-                    content, "todoWorks") + 1,
-                    dayCreated: getToday()
-                }
+                    numOfWorks:
+                        numberOfExistObjectElement(
+                            stateTodoList.todoListArray,
+                            content,
+                            'todoWorks'
+                        ) + 1,
+                    dayCreated: getToday(),
+                    dayIssue:
+                        (dateValueContent && normalizeDate(dateValueContent)) ||
+                        getToday()
+                    // : getToday()
+                };
+
                 addTodoItem(item);
             }
-        }
-        
+        };
+        const todoListArrayLength = computed(() => {
+            return stateTodoList.todoListArray.length - 1;
+        });
+
         return {
             stateTodoList,
             addTodoHandler,
-            arrayCart
-        }
-    },
-    
+            arrayCart,
+            todoListArrayLength
+        };
+    }
 });
 </script>
-<style lang="scss" >
-// /* @tailwind base; */
+<style lang="scss">
 @tailwind components;
 
-@layer components{
-    body{
-        .todo-list{
-            &-title{
+@layer components {
+    body {
+        .todo-list {
+            &-title {
                 @apply text-2xl font-black;
             }
-            &-section{
+            &-section {
                 @apply bg-white rounded shadow p-6 m-4 w-full lg:w-3/4 lg:max-w-lg;
             }
-            &-form{
+            &-form {
                 @apply w-full flex flex-col items-center justify-center bg-teal-100 font-sans;
             }
-            &-content{
+            &-content {
                 @apply mb-6 left-0;
             }
-            &-input-section{
-                @apply flex mt-1 ;
+            &-input-section {
+                @apply flex mt-1;
             }
             // &-input-area{
             //     @apply shadow-lg border-2 appearance-none border rounded w-full py-2 px-3 mr-4 text-gray-500 border-gray-400;
             // }
-            &-button{
+            &-button {
                 @apply ml-2 rounded-xl bg-white border-teal-400 text-teal-600 cursor-pointer flex-shrink-0 p-2 hover:text-teal-800 hover:border-teal-600;
             }
         }
-        .cart-section{
+        .cart-section {
             @apply m-4 flex-col shadow-lg;
-        }    
+        }
     }
-
 }
-</style> !==
+</style>
+!==

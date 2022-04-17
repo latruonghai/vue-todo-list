@@ -1,24 +1,34 @@
 <template>
     <div class="work-counter">
-        <span>{{itemContent.numOfWorks}}</span>
+        <span>{{ itemContent.numOfWorks }}</span>
     </div>
-    <div :id="`cart-${order}`" class="cart-item">
+    <div
+        :id="`cart-${order}`"
+        class="cart-item"
+    >
         <!-- <input :type="'checkbox'" v-model="getStatus" @change="
         "/> -->
         <p :class="`cart-content ${doneStatus}`">
-            <span class="title">{{dayCreated}}</span>
-            {{itemContent.todoWorks}}
+            {{ itemContent.todoWorks }}<span class="comma">, </span>
+            <span class="title">{{ dayExpiration }}</span>
         </p>
         <!-- <p v-else  class="cart-content done" >{{itemContent.todoWorks}}</p> -->
-
-        <Button :contentButton="itemContent.done?'Not Done':'Done'" :extraClassName="'edit'" :onClickHandler="setDoneItemHandler" ></Button>
-        <Button contentButton="Remove" :extraClassName="'remove'" :onClickHandler="removeItemHandler"></Button>
+        <Button
+            :contentButton="itemContent.done ? 'Not Done' : 'Done'"
+            :extraClassName="'edit'"
+            :onClickHandler="setDoneItemHandler"
+        ></Button>
+        <Button
+            contentButton="Remove"
+            :extraClassName="'remove'"
+            :onClickHandler="removeItemHandler"
+        ></Button>
     </div>
 </template>
 
 <script lang="ts">
 import useTodoList from '../store/todolistItem';
-import Button from "./Button.vue";
+import Button from './Button.vue';
 // import produce from "immer";
 import Input from './Input.vue';
 import { TodoListItem } from '../../typings/globals';
@@ -26,83 +36,81 @@ import { dayFrom, getRelativeDay } from '../utils/handleDate';
 import { computed } from '@vue/runtime-core';
 
 export default {
-    props:{
-        itemContent: { 
+    props: {
+        itemContent: {
             type: Object as () => TodoListItem,
-            default: "Todo",
-            validation(value: string){
-                // console.log(value.length>0);
+            default: 'Todo',
+            validation(value: string) {
                 return value.length > 0;
             }
         },
-        // done:{
-        //     type: Boolean,
-        //     default: true,
-        // },
-        order: Number,
+        order: Number
     },
-    components:{
+    components: {
         Button,
         Input
     },
-    setup(props: any){
-
-
+    setup(props: any) {
         const todoListStore = useTodoList();
-        const {removeTodoItem,setDoneItem} = todoListStore;
-        const removeItemHandler = () =>{
-            const length = todoListStore.todoListArray.length;
-            const item = todoListStore.todoListArray[length - 1 - props.order as number];
-            // console.log("Remove item", item);
+        const { removeTodoItem, setDoneItem } = todoListStore;
+        const removeItemHandler = () => {
+            const item = todoListStore.todoListArray[props.order as number];
             removeTodoItem(item);
-        }
-        const setDoneItemHandler = () =>{
-            const item = todoListStore.todoListArray[length - 1 - props.order as number];
-            // console.log("Set done item", item);
+        };
+        const setDoneItemHandler = () => {
+            const item = todoListStore.todoListArray[props.order as number];
+
             setDoneItem(item);
         };
 
-        const doneStatus = computed(() =>{
-            return props.itemContent.done?"done":"";
+        const doneStatus = computed(() => {
+            return props.itemContent.done ? 'done' : '';
         });
-        const dayCreated = computed(() =>{
-            const dayString = props.itemContent.dayCreated;
+        const dayExpiration = computed(() => {
+            const dayString = (<TodoListItem>props.itemContent)
+                .dayIssue as string;
+
+            console.log('dayString', dayString);
             const dayRelative = getRelativeDay(dayFrom(dayString));
-            return dayRelative === ""? props.itemContent.dayString: dayRelative;
-        })
-        return{
+            // const dayCreated = normalizeDate(dayString);
+            return dayRelative === '' ? dayString : dayRelative;
+        });
+        return {
             removeItemHandler,
             setDoneItemHandler,
-            dayCreated,
+            dayExpiration,
             doneStatus
-        }
+        };
     }
-}
+};
 </script>
 
 <style lang="scss">
 @tailwind components;
 
-@layer components{
-    body{
-        .cart{
-            &-item{
+@layer components {
+    body {
+        .cart {
+            &-item {
                 @apply my-2 p-1 flex items-center ml-2;
             }
-            &-content{
-                @apply w-full text-gray-600 text-left font-mono; 
+            &-content {
+                @apply w-full text-gray-600 text-left font-mono;
             }
-
         }
-        .done{
+        .done {
             @apply line-through text-red-500;
         }
-        .title{
+        .title {
             @apply text-red-500;
         }
-        .work-counter{
-            @apply rounded-md items-center relative w-1/12;
+        .work-counter {
+            @apply rounded-md items-center relative w-1/12
+            bg-green-500 font-bold;
             transform: translateY(35%);
+        }
+        .comma {
+            @apply text-gray-500 font-bold;
         }
     }
 }

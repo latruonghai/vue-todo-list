@@ -1,51 +1,52 @@
 <template>
-    <input :id="idName" class="input-section" :type="typeName" :placeholder="placeHolder"
-            @change="(e) => onChange(e)">
+    <input
+        :id="idName"
+        class="input-section"
+        :type="typeName"
+        :placeholder="placeHolder"
+        @change="(e) => onChange(e)"
+    />
 </template>
 
 <script lang="ts">
 // import Vue from 'vue'
 export default {
-    props:{
-        extraClassName:{
+    props: {
+        extraClassName: {
             type: String,
-            default: "",
+            default: ''
         },
-        typeName:{
+        typeName: {
             type: String,
-            default: "text",
+            default: 'text'
         },
-        placeHolder:{
+        placeHolder: {
             type: String,
-            default: "",
+            default: ''
         },
-        
-        onChange:{
+
+        onChange: {
             type: Function,
             default: (event: any) => {
-                console.log("This is input ");
-            },
+                console.log('This is input ');
+            }
         },
-        idName:{
+        idName: {
             type: String,
-            default: "",
-        },
-
-        
+            default: ''
+        }
     }
-}
-
+};
 </script>
 
 <style lang="scss">
 @tailwind components;
 
-@layer components{
-    body{
-        .input-section{
-            @apply w-full shadow-lg border-black focus:text-red-500 appearance-none border rounded-md py-2 px-3 mr-4;
+@layer components {
+    body {
+        .input-section {
+            @apply w-full shadow-lg border-black focus:text-black appearance-none border rounded-md py-2 px-3 mr-4;
         }
-
     }
 }
 </style>
