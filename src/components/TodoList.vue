@@ -39,11 +39,10 @@ import { computed, defineComponent, PropType } from 'vue';
 import Button from '../components/Button.vue';
 import Input from './Input.vue';
 import Cart from './CartItem.vue';
-import { TodoListItem } from '../../typings/globals';
-import useTodoList from '../store/todolistItem';
-import { numberOfExistObjectElement, reverseArray } from '../utils/handleArray';
+import { TodoListItem } from '../../typings/store';
+import { useTodoList } from '../store';
+import { numberOfExistObjectElement } from '../utils/handleArray';
 import {
-    dayFrom,
     getToday,
     normalizeDate,
     sortByDay,
@@ -102,6 +101,7 @@ export default defineComponent({
                 addTodoItem(item);
             }
         };
+
         const todoListArrayLength = computed(() => {
             return stateTodoList.todoListArray.length;
         });

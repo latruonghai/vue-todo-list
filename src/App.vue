@@ -3,21 +3,39 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 // import HelloWorld from './components/HelloWorld.vue';
 import TodoList from './components/TodoList.vue';
+import BasicForm from './components/Form/BasicForm.vue';
+// import useToggleModal from './store';
+import { useToggleModal } from './store';
+import Modal from './components/Modal.vue';
+import { defineComponent } from '@vue/runtime-core';
+// import useToggleModal from './store/toggleModal';
 // import TodoList from './components/TodoList.vue';
-export default {
+export default defineComponent({
     components: {
-        TodoList
+        TodoList,
+        Modal,
+        BasicForm
     },
     setup() {
         // provide("store", {methods, state});
+        const toggleModal = useToggleModal();
+
+        return {
+            toggleModal
+        };
     }
-};
+});
 </script>
 
 <template>
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
     <todo-list />
+    <Modal v-show="toggleModal.isShow">
+        <template #body>
+            <BasicForm />
+        </template>
+    </Modal>
 </template>
 
 <style>

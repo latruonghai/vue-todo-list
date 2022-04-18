@@ -19,22 +19,35 @@
             :onClickHandler="setDoneItemHandler"
         ></Button>
         <Button
+            v-if="!itemContent.done"
+            contentButton="Edit"
+            :extraClassName="'remove'"
+            :onClickHandler="
+                () => {
+                    toggleModalAction(true);
+                }
+            "
+        />
+        <Button
+            v-else
             contentButton="Remove"
             :extraClassName="'remove'"
             :onClickHandler="removeItemHandler"
-        ></Button>
+        />
     </div>
 </template>
 <script lang="ts">
-import useTodoList from '../store/todolistItem';
+// import useTodoList from '../store/todolistItem';
 import Button from './Button.vue';
 // import produce from "immer";
 import Input from './Input.vue';
-import { TodoListItem } from '../../typings/globals';
-import { dayFrom, getRelativeDay } from '../utils/handleDate';
-import { computed } from '@vue/runtime-core';
 
-export default {
+import { dayFrom, getRelativeDay } from '../utils/handleDate';
+import { computed, defineComponent } from '@vue/runtime-core';
+import { TodoListItem } from '../../typings/store';
+import { useToggleModal, useTodoList } from '../store';
+
+export default defineComponent({
     props: {
         itemContent: {
             type: Object as () => TodoListItem,
@@ -51,6 +64,8 @@ export default {
     },
     setup(props: any) {
         const todoListStore = useTodoList();
+        const toggleModal = useToggleModal();
+        const { toggleModalAction } = toggleModal;
         const { removeTodoItem, setDoneItem } = todoListStore;
         const removeItemHandler = () => {
             const item = todoListStore.todoListArray[props.order as number];
@@ -69,7 +84,6 @@ export default {
             const dayString = (<TodoListItem>props.itemContent)
                 .dayIssue as string;
 
-            console.log('dayString', dayString);
             const dayRelative = getRelativeDay(dayFrom(dayString));
             // const dayCreated = normalizeDate(dayString);
             return dayRelative === '' ? dayString : dayRelative;
@@ -78,10 +92,11 @@ export default {
             removeItemHandler,
             setDoneItemHandler,
             dayExpiration,
-            doneStatus
+            doneStatus,
+            toggleModalAction
         };
     }
-};
+});
 </script>
 
 <style lang="scss">

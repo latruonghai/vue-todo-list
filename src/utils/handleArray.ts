@@ -45,6 +45,5 @@ export function findItem(elements: any[], el: any, properties: string) {
 }
 
 export function reverseArray(arr: any[]): void {
-    // console.log("arr", arr);
     _.reverse(arr);
 }

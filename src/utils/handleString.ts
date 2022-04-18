@@ -15,3 +15,6 @@ export const standardizeString = (str: string): string => {
 export const toLowerString = (str: string): string => {
     return _.toLower(str);
 };
+export const toUpperCase = (str: string): string => {
+    return _.upperCase(str);
+};

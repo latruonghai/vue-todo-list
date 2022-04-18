@@ -1,5 +1,6 @@
+import { TodoListItemArray, TodoListItem } from '../../typings/store';
 import { defineStore } from 'pinia';
-import { TodoListItem, TodoListItemArray } from '../../typings/globals';
+// import TodoListItemArray
 import {
     checkExistElement,
     findExistElementByProperties
@@ -51,4 +52,4 @@ const useTodoList = defineStore('todoListItem', {
     }
 });
 
-export default useTodoList;
+export { useTodoList };

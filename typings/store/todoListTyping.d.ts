@@ -1,4 +1,4 @@
-export interface TodoListItem {
+interface TodoListItem {
     todoWorks: string;
     numOfWorks?: number;
     done?: boolean;
@@ -8,9 +8,11 @@ export interface TodoListItem {
     timeStamp?: number;
 }
 
-export interface TodoListItemArray {
+interface TodoListItemArray {
     todoListArray: TodoListItem[];
     // currentItem: TodoListItem;
 }
 
-export type StateGlobal = TodoListItem | TodoListItemArray | null;
+type StateGlobal = TodoListItem | TodoListItemArray | null;
+
+export { TodoListItem, TodoListItemArray, StateGlobal };

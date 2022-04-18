@@ -12,7 +12,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from '@vue/runtime-core';
+
+export default defineComponent({
     props: {
         extraClassName: {
             type: String,
@@ -29,7 +31,7 @@ export default {
             default: 'Hello'
         }
     }
-};
+});
 </script>
 
 <style lang="scss">

@@ -1,16 +1,8 @@
-<template>
-    <input
-        :id="idName"
-        class="input-section"
-        :type="typeName"
-        :placeholder="placeHolder"
-        @change="(e) => onChange(e)"
-    />
-</template>
-
 <script lang="ts">
+import { defineComponent } from '@vue/runtime-core';
+
 // import Vue from 'vue'
-export default {
+export default defineComponent({
     props: {
         extraClassName: {
             type: String,
@@ -36,10 +28,23 @@ export default {
             default: ''
         }
     }
-};
+});
 </script>
 
-<style lang="scss">
+<template>
+    <input
+        :id="idName"
+        class="input-section"
+        :type="typeName"
+        :placeholder="placeHolder"
+        @change="(e) => onChange(e)"
+    />
+</template>
+
+<style
+    lang="scss"
+    scope
+>
 @tailwind components;
 
 @layer components {
