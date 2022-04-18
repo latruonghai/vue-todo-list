@@ -4,7 +4,12 @@ import {
     checkExistElement,
     findExistElementByProperties
 } from '../utils/handleArray';
-import { getToday, convertDayToNumber, dayFrom } from '../utils/handleDate';
+import {
+    getToday,
+    convertDayToNumber,
+    dayFrom,
+    sortByDay
+} from '../utils/handleDate';
 
 const useTodoList = defineStore('todoListItem', {
     state: (): TodoListItemArray => {
@@ -24,6 +29,7 @@ const useTodoList = defineStore('todoListItem', {
                 !checkExistElement(this.todoListArray, todoWorks, 'todoWorks')
             ) {
                 this.todoListArray.push(todoItem);
+                // sortByDay(arr, )
             } else {
                 const item = findExistElementByProperties(
                     this.todoListArray,

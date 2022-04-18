@@ -26,7 +26,7 @@
                     <Cart
                         :itemContent="item"
                         :done="item.done"
-                        :order="todoListArrayLength - index"
+                        :order="item.order"
                     />
                 </div>
             </div>
@@ -38,11 +38,17 @@
 import { computed, defineComponent, PropType } from 'vue';
 import Button from '../components/Button.vue';
 import Input from './Input.vue';
-import Cart from './Cart.vue';
+import Cart from './CartItem.vue';
 import { TodoListItem } from '../../typings/globals';
 import useTodoList from '../store/todolistItem';
 import { numberOfExistObjectElement, reverseArray } from '../utils/handleArray';
-import { getToday, normalizeDate } from '../utils/handleDate';
+import {
+    dayFrom,
+    getToday,
+    normalizeDate,
+    sortByDay,
+    toTimeStamp
+} from '../utils/handleDate';
 import { standardizeString } from '../utils/handleString';
 import { getElementInputContent } from '../utils/handleDOM';
 
@@ -63,15 +69,18 @@ export default defineComponent({
         const stateTodoList = useTodoList();
         const { addTodoItem } = stateTodoList;
         const arrayCart = computed(() => {
-            console.log('TodoList arrayCart', stateTodoList.todoListArray);
-            const arr = [...stateTodoList.todoListArray];
-            reverseArray(arr);
+            console.log('arrayCart', stateTodoList.todoListArray);
+            let arr = sortByDay(stateTodoList.todoListArray);
+
             return arr;
         });
 
         const addTodoHandler = () => {
             const content = getElementInputContent('todo-item-content');
             const dateValueContent = getElementInputContent('todo-item-date');
+            const today = getToday();
+            const dayIssue =
+                (dateValueContent && normalizeDate(dateValueContent)) || today;
 
             if (content.length > 0) {
                 const item: TodoListItem = {
@@ -83,18 +92,18 @@ export default defineComponent({
                             content,
                             'todoWorks'
                         ) + 1,
-                    dayCreated: getToday(),
-                    dayIssue:
-                        (dateValueContent && normalizeDate(dateValueContent)) ||
-                        getToday()
-                    // : getToday()
+                    dayCreated: today,
+                    dayIssue: dayIssue,
+                    order: todoListArrayLength.value,
+                    // : getToday(),
+                    timeStamp: toTimeStamp(dayIssue)
                 };
 
                 addTodoItem(item);
             }
         };
         const todoListArrayLength = computed(() => {
-            return stateTodoList.todoListArray.length - 1;
+            return stateTodoList.todoListArray.length;
         });
 
         return {

@@ -4,6 +4,8 @@ export interface TodoListItem {
     done?: boolean;
     dayCreated?: string;
     dayIssue?: string;
+    order?: number;
+    timeStamp?: number;
 }
 
 export interface TodoListItemArray {

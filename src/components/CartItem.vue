@@ -9,7 +9,7 @@
         <!-- <input :type="'checkbox'" v-model="getStatus" @change="
         "/> -->
         <p :class="`cart-content ${doneStatus}`">
-            {{ itemContent.todoWorks }}<span class="comma">, </span>
+            {{ itemContent.todoWorks }}<span class="comma"> | </span>
             <span class="title">{{ dayExpiration }}</span>
         </p>
         <!-- <p v-else  class="cart-content done" >{{itemContent.todoWorks}}</p> -->
@@ -25,7 +25,6 @@
         ></Button>
     </div>
 </template>
-
 <script lang="ts">
 import useTodoList from '../store/todolistItem';
 import Button from './Button.vue';

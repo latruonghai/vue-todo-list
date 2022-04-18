@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment, { Moment } from 'moment';
 
 const FORMAT_ISO = 'dddd, DD-MM-YYYY';
@@ -37,4 +38,16 @@ export function getRelativeDay(numOfDay: number): string {
         default:
             return '';
     }
+}
+
+export function sortByDay(day1: any[]) {
+    return _.sortBy(day1, [
+        function (o) {
+            return o.timeStamp;
+        }
+    ]);
+}
+
+export function toTimeStamp(day1: string): number {
+    return moment(day1, FORMAT_ISO).unix();
 }
