@@ -33,7 +33,6 @@ export function numberOfExistObjectElement(
     properties: string
 ) {
     return _.filter(elements, (o: any) => {
-        console.log('o ', o);
         return o[properties] === el;
     }).length;
 }

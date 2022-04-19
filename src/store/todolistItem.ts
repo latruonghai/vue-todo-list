@@ -41,7 +41,6 @@ const useTodoList = defineStore('todoListItem', {
                     todoWorks,
                     'todoWorks'
                 );
-                console.log('item ', item);
                 item.numOfWorks += 1;
             }
         },
@@ -56,7 +55,6 @@ const useTodoList = defineStore('todoListItem', {
         },
         setCurrentItem(todoItem: TodoListItem): void {
             this.currentItem = todoItem;
-            console.log('this.currentItem ', this.currentItem);
         }
     }
 });

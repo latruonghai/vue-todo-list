@@ -12,25 +12,31 @@ export default defineComponent({
     props: {
         itemSelected: {
             type: Object as () => TodoListItem,
-            default : {
-
-            }
-        },
-        
+            default: {}
+        }
     },
     setup(props) {
-
-        const DONT_RENDER_LABEL = ["todoWorks", "dayIssue"];
+        const DONT_RENDER_LABEL = ['todoWorks', 'dayIssue'];
         const checkValidLabel = (label: string): boolean => {
             // console.log("label", label);
             return DONT_RENDER_LABEL.includes(label, 0);
         };
-        
+        const listAccepted = computed(() => {
+            return Object.keys(props.itemSelected).filter((label: string) =>
+                checkValidLabel(label)
+            );
+        });
         const todoList = useTodoList();
         // console.log("Item selected", props.itemSelected);
         const { todoListArray } = todoList;
-        
-        return { toUpperCase, props, todoListArray, checkValidLabel, standardizeString };
+
+        return {
+            toUpperCase,
+            props,
+            todoListArray,
+            listAccepted,
+            standardizeString
+        };
     },
     components: { InputForm }
 });
@@ -43,13 +49,12 @@ export default defineComponent({
         </div>
         <div
             class="input-area"
-            v-for="(value, name, index) in props.itemSelected"
+            v-for="(name, index) in listAccepted"
             :key="index"
         >
             <InputForm
                 :label-name="standardizeString(toUpperCase(name))"
-                v-if="checkValidLabel(name)"
-                :inputValue="((value) as string)"
+                :inputValue="(itemSelected[name] as string)"
             />
         </div>
         <div class="form-body"></div>

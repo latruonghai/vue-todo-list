@@ -1,40 +1,40 @@
 <template>
-    <Modal v-show="toggleModal.isShow">
-        <template #body>
-            <BasicForm :itemSelected="stateTodoList.currentItem" />
-        </template>
-    </Modal>
-    <div class="todo-list-form">
-        <div class="todo-list-section">
-            <span class="display-date">{{ today }}</span>
-            <div class="todo-list-content">
-                <h1 class="todo-list-title">Todo List</h1>
-                <div class="todo-list-input-section">
-                    <Input
-                        :idName="'todo-item-content'"
-                        placeHolder="Add Todo"
-                    />
-                    <Input
-                        typeName="date"
-                        idName="todo-item-date"
-                    />
-                    <Button
-                        contentButton="Add"
-                        :extraClassName="'add'"
-                        :onClickHandler="addTodoHandler"
-                        titleString="Add new work into todo list"
-                    ></Button>
-                </div>
-                <div
-                    class="cart-section"
-                    v-for="(item, index) in arrayCart"
-                    :key="index"
-                >
-                    <ListItem
-                        :itemContent="item"
-                        :done="item.done"
-                        :order="item.order"
-                    />
+    <div>
+        <Modal v-show="toggleModal.isShow">
+            <template #body>
+                <BasicForm :itemSelected="stateTodoList.currentItem" />
+            </template>
+        </Modal>
+        <div class="todo-list-form">
+            <div class="todo-list-section">
+                <span class="display-date">{{ today }}</span>
+                <div class="todo-list-content">
+                    <h1 class="todo-list-title">Todo List</h1>
+                    <div class="todo-list-input-section">
+                        <Input
+                            :idName="'todo-item-content'"
+                            placeHolder="Add Todo"
+                        />
+                        <Input
+                            typeName="date"
+                            idName="todo-item-date"
+                        />
+                        <Button
+                            contentButton="Add"
+                            :extraClassName="'add'"
+                            :onClickHandler="addTodoHandler"
+                            titleString="Add new work into todo list"
+                        ></Button>
+                    </div>
+                    <div class="cart-section">
+                        <ListItem
+                            v-for="(item, index) in arrayCart"
+                            :key="index"
+                            :itemContent="item"
+                            :done="item.done"
+                            :order="item.order"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
