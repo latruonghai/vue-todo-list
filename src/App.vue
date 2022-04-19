@@ -31,11 +31,7 @@ export default defineComponent({
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
     <todo-list />
-    <Modal v-show="toggleModal.isShow">
-        <template #body>
-            <BasicForm />
-        </template>
-    </Modal>
+    
 </template>
 
 <style>
@@ -47,6 +43,7 @@ export default defineComponent({
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+    background-color: #ecf0f1;
 }
 .title {
     font-weight: 700;

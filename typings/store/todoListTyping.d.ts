@@ -10,7 +10,7 @@ interface TodoListItem {
 
 interface TodoListItemArray {
     todoListArray: TodoListItem[];
-    // currentItem: TodoListItem;
+    currentItem: TodoListItem;
 }
 
 type StateGlobal = TodoListItem | TodoListItemArray | null;

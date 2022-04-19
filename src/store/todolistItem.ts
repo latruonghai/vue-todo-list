@@ -5,17 +5,21 @@ import {
     checkExistElement,
     findExistElementByProperties
 } from '../utils/handleArray';
-import {
-    getToday,
-    convertDayToNumber,
-    dayFrom,
-    sortByDay
-} from '../utils/handleDate';
+import { getToday } from '../utils/handleDate';
 
 const useTodoList = defineStore('todoListItem', {
     state: (): TodoListItemArray => {
         return {
-            todoListArray: []
+            todoListArray: [],
+            currentItem: {
+                todoWorks: '',
+                numOfWorks: 0,
+                done: false,
+                dayCreated: getToday(),
+                dayIssue: '',
+                order: 0,
+                timeStamp: Date.now()
+            }
         };
     },
     getters: {
@@ -41,6 +45,7 @@ const useTodoList = defineStore('todoListItem', {
                 item.numOfWorks += 1;
             }
         },
+
         removeTodoItem(todoItem: TodoListItem): void {
             this.todoListArray.splice(this.todoListArray.indexOf(todoItem), 1);
         },
@@ -48,6 +53,10 @@ const useTodoList = defineStore('todoListItem', {
             const stateItem = todoItem.done;
             this.todoListArray[this.todoListArray.indexOf(todoItem)].done =
                 !stateItem;
+        },
+        setCurrentItem(todoItem: TodoListItem): void {
+            this.currentItem = todoItem;
+            console.log('this.currentItem ', this.currentItem);
         }
     }
 });

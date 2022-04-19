@@ -1,4 +1,4 @@
-import { TodoListItem } from './../../typings/globals.d';
+import { TodoListItem } from '../../typings/store';
 import _ from 'lodash';
 
 export function checkExistElement(

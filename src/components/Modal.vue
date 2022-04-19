@@ -16,13 +16,7 @@
                 </div>
                 <div class="modal-footer">
                     <slot name="footer">
-                        <Button
-                            :onClickHandler="
-                                () => {
-                                    toggleModalAction(false);
-                                }
-                            "
-                        />
+                        <Button :onClickHandler="onClickCloseHandler" />
                     </slot>
                 </div>
             </div>
@@ -42,9 +36,11 @@ export default defineComponent({
     setup() {
         const toggleModal = useToggleModal();
         const { toggleModalAction } = toggleModal;
-
+        const onClickCloseHandler = () => {
+            toggleModalAction(false);
+        };
         return {
-            toggleModalAction
+            onClickCloseHandler
         };
     }
 });

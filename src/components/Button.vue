@@ -6,6 +6,7 @@
             }
         "
         :class="'btn ' + extraClassName"
+        :title="titleString"
     >
         {{ contentButton }}
     </button>
@@ -27,6 +28,10 @@ export default defineComponent({
             }
         },
         contentButton: {
+            type: String,
+            default: 'Hello'
+        },
+        titleString: {
             type: String,
             default: 'Hello'
         }

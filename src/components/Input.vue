@@ -18,10 +18,7 @@ export default defineComponent({
         },
 
         onChange: {
-            type: Function,
-            default: (event: any) => {
-                console.log('This is input ');
-            }
+            type: Function
         },
         idName: {
             type: String,

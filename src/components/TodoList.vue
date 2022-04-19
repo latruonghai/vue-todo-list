@@ -1,6 +1,12 @@
 <template>
+    <Modal v-show="toggleModal.isShow">
+        <template #body>
+            <BasicForm :itemSelected="stateTodoList.currentItem" />
+        </template>
+    </Modal>
     <div class="todo-list-form">
         <div class="todo-list-section">
+            <span class="display-date">{{ today }}</span>
             <div class="todo-list-content">
                 <h1 class="todo-list-title">Todo List</h1>
                 <div class="todo-list-input-section">
@@ -16,6 +22,7 @@
                         contentButton="Add"
                         :extraClassName="'add'"
                         :onClickHandler="addTodoHandler"
+                        titleString="Add new work into todo list"
                     ></Button>
                 </div>
                 <div
@@ -23,7 +30,7 @@
                     v-for="(item, index) in arrayCart"
                     :key="index"
                 >
-                    <Cart
+                    <ListItem
                         :itemContent="item"
                         :done="item.done"
                         :order="item.order"
@@ -36,11 +43,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
-import Button from '../components/Button.vue';
+// import my-button from '../components/my-button.vue';
 import Input from './Input.vue';
-import Cart from './CartItem.vue';
+import ListItem from './ListItem.vue';
+import Button from './Button.vue';
 import { TodoListItem } from '../../typings/store';
-import { useTodoList } from '../store';
+import { useTodoList, useToggleModal } from '../store';
 import { numberOfExistObjectElement } from '../utils/handleArray';
 import {
     getToday,
@@ -50,13 +58,19 @@ import {
 } from '../utils/handleDate';
 import { standardizeString } from '../utils/handleString';
 import { getElementInputContent } from '../utils/handleDOM';
+import Modal from './Modal.vue';
+import BasicForm from './Form/BasicForm.vue';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
     name: 'TodoList',
     components: {
-        Button,
+        // my-button,
         Input,
-        Cart
+        ListItem,
+        Modal,
+        BasicForm,
+        Button
     },
     props: {
         itemArray: {
@@ -66,7 +80,10 @@ export default defineComponent({
     },
     setup() {
         const stateTodoList = useTodoList();
+        const today = getToday();
         const { addTodoItem } = stateTodoList;
+        const { currentItem } = storeToRefs(stateTodoList);
+        // console.log('current', currentItem);
         const arrayCart = computed(() => {
             const arr = sortByDay(stateTodoList.todoListArray);
 
@@ -76,7 +93,7 @@ export default defineComponent({
         const addTodoHandler = () => {
             const content = getElementInputContent('todo-item-content');
             const dateValueContent = getElementInputContent('todo-item-date');
-            const today = getToday();
+
             const dayIssue =
                 (dateValueContent && normalizeDate(dateValueContent)) || today;
 
@@ -101,6 +118,8 @@ export default defineComponent({
             }
         };
 
+        const toggleModal = useToggleModal();
+
         const todoListArrayLength = computed(() => {
             return stateTodoList.todoListArray.length;
         });
@@ -109,7 +128,10 @@ export default defineComponent({
             stateTodoList,
             addTodoHandler,
             arrayCart,
-            todoListArrayLength
+            todoListArrayLength,
+            toggleModal,
+            currentItem: currentItem.value,
+            today
         };
     }
 });
@@ -119,12 +141,15 @@ export default defineComponent({
 
 @layer components {
     body {
+        .display-date {
+            @apply font-thin text-gray-500 float-right italic;
+        }
         .todo-list {
             &-title {
-                @apply text-2xl font-black;
+                @apply text-2xl font-black mb-2;
             }
             &-section {
-                @apply bg-white rounded shadow p-6 m-4 w-full lg:w-3/4 lg:max-w-lg;
+                @apply bg-white rounded p-6 m-4 w-full lg:w-3/4 lg:max-w-lg shadow-lg;
             }
             &-form {
                 @apply w-full flex flex-col items-center justify-center bg-teal-100 font-sans;

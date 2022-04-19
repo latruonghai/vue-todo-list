@@ -1,22 +1,36 @@
 <script lang="ts">
-import { computed, defineComponent } from '@vue/runtime-core';
+import { computed, defineComponent, watch } from '@vue/runtime-core';
+import { TodoListItem } from '../../../typings/store';
 import { useTodoList } from '../../store';
 // import InputForm from './InputForm.vue';
-import { toUpperCase } from '../../utils/handleString';
+import { checkExistElement } from '../../utils/handleArray';
+import { toUpperCase, standardizeString } from '../../utils/handleString';
 import InputForm from './InputForm.vue';
 
 export default defineComponent({
     name: 'Form',
     props: {
-        order: Number
+        itemSelected: {
+            type: Object as () => TodoListItem,
+            default : {
+
+            }
+        },
+        
     },
     setup(props) {
+
+        const DONT_RENDER_LABEL = ["todoWorks", "dayIssue"];
+        const checkValidLabel = (label: string): boolean => {
+            // console.log("label", label);
+            return DONT_RENDER_LABEL.includes(label, 0);
+        };
+        
         const todoList = useTodoList();
+        // console.log("Item selected", props.itemSelected);
         const { todoListArray } = todoList;
-        const currentItem = computed(() => {
-            return todoListArray[props.order as number];
-        });
-        return { toUpperCase, props, todoListArray, currentItem };
+        
+        return { toUpperCase, props, todoListArray, checkValidLabel, standardizeString };
     },
     components: { InputForm }
 });
@@ -29,11 +43,12 @@ export default defineComponent({
         </div>
         <div
             class="input-area"
-            v-for="(value, name, index) in currentItem"
+            v-for="(value, name, index) in props.itemSelected"
             :key="index"
         >
             <InputForm
-                :label-name="toUpperCase(name)"
+                :label-name="standardizeString(toUpperCase(name))"
+                v-if="checkValidLabel(name)"
                 :inputValue="((value) as string)"
             />
         </div>
