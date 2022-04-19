@@ -1,6 +1,6 @@
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/runtime-core';
-import { TodoListItem } from '../../../typings/store';
+import { computed, defineComponent } from '@vue/runtime-core';
+import { useTodoList } from '../../store';
 // import InputForm from './InputForm.vue';
 import { toUpperCase } from '../../utils/handleString';
 import InputForm from './InputForm.vue';
@@ -8,19 +8,15 @@ import InputForm from './InputForm.vue';
 export default defineComponent({
     name: 'Form',
     props: {
-        itemTodoList: {
-            type: Object as PropType<TodoListItem>,
-            default: () => {
-                return {
-                    todoWorks: '',
-                    dayIssue: '',
-                    dayCreated: ''
-                };
-            }
-        }
+        order: Number
     },
     setup(props) {
-        return { toUpperCase, props };
+        const todoList = useTodoList();
+        const { todoListArray } = todoList;
+        const currentItem = computed(() => {
+            return todoListArray[props.order as number];
+        });
+        return { toUpperCase, props, todoListArray, currentItem };
     },
     components: { InputForm }
 });
@@ -33,10 +29,13 @@ export default defineComponent({
         </div>
         <div
             class="input-area"
-            v-for="(value, name, index) in props.itemTodoList"
+            v-for="(value, name, index) in currentItem"
             :key="index"
         >
-            <InputForm :label-name="toUpperCase(name)" />
+            <InputForm
+                :label-name="toUpperCase(name)"
+                :inputValue="((value) as string)"
+            />
         </div>
         <div class="form-body"></div>
     </div>

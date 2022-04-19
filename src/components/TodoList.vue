@@ -68,8 +68,7 @@ export default defineComponent({
         const stateTodoList = useTodoList();
         const { addTodoItem } = stateTodoList;
         const arrayCart = computed(() => {
-            console.log('arrayCart', stateTodoList.todoListArray);
-            let arr = sortByDay(stateTodoList.todoListArray);
+            const arr = sortByDay(stateTodoList.todoListArray);
 
             return arr;
         });

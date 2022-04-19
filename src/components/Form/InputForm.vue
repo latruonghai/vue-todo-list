@@ -13,7 +13,8 @@ export default defineComponent({
         placeholderString: String,
         inputType: String,
         inputName: String,
-        typeName: String
+        typeName: String,
+        inputValue: Object as () => String
     },
 
     setup(props) {
@@ -34,6 +35,7 @@ export default defineComponent({
             :class="`input-form ${props.extraClassName}`"
             :placeholder="props.placeholderString"
             :name="props.inputName"
+            :value="props.inputValue"
         />
     </div>
 </template>

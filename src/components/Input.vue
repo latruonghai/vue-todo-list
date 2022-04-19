@@ -50,7 +50,7 @@ export default defineComponent({
 @layer components {
     body {
         .input-section {
-            @apply w-full shadow-lg border-black focus:text-black appearance-none border rounded-md py-2 px-3 mr-4;
+            @apply w-full shadow-sm border-black focus:text-black appearance-none border rounded-md py-2 px-3 mr-4;
         }
     }
 }
