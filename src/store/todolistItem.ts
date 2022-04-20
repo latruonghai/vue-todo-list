@@ -55,6 +55,9 @@ const useTodoList = defineStore('todoListItem', {
         },
         setCurrentItem(todoItem: TodoListItem): void {
             this.currentItem = todoItem;
+        },
+        updateTodoListItem(todoItem: TodoListItem, index: number): void {
+            this.todoListArray[index] = todoItem;
         }
     }
 });

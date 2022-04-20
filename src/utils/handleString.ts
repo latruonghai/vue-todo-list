@@ -18,3 +18,9 @@ export const toLowerString = (str: string): string => {
 export const toUpperCase = (str: string): string => {
     return _.upperCase(str);
 };
+
+export const checkIfStringIncludes = (str: string) => {};
+
+export const toKebabCase = (str: string): string => {
+    return _.kebabCase(str);
+};

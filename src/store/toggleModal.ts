@@ -4,7 +4,7 @@ import { ToggleState } from '../../typings/store';
 const useToggleModal = defineStore('toggleModal', {
     state: (): ToggleState => {
         return {
-            isShow: false
+            isShow: true
         };
     },
     actions: {

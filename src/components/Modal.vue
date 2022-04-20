@@ -16,7 +16,10 @@
                 </div>
                 <div class="modal-footer">
                     <slot name="footer">
-                        <Button :onClickHandler="onClickCloseHandler" />
+                        <Button
+                            :onClickHandler="onClickCloseHandler"
+                            contentButton="Close"
+                        />
                     </slot>
                 </div>
             </div>
@@ -46,10 +49,7 @@ export default defineComponent({
 });
 </script>
 
-<style
-    lang="scss"
-    scoped
->
+<style lang="scss">
 @tailwind components;
 
 @layer components {

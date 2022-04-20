@@ -45,7 +45,9 @@ export default defineComponent({
 @layer components {
     body {
         .btn {
-            @apply flex-shrink-0 p-2 border-black bg-blue-400 text-black rounded-md cursor-pointer;
+            @apply flex-shrink-0 p-2 border-blue-400 bg-white text-blue-400
+            rounded-md cursor-pointer hover:bg-blue-400 hover:border-blue-600 
+            hover:text-white hover:font-bold;
         }
         .add {
             @apply text-teal-300 border-teal-400 hover:text-teal-400 

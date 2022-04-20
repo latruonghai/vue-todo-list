@@ -13,7 +13,8 @@ export default defineComponent({
         inputType: String,
         inputName: String,
         typeName: String,
-        inputValue: Object as () => String
+        inputValue: Object as () => String,
+        idName: String
     },
 
     setup(props) {
@@ -23,7 +24,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="input-section">
+    <div class="input-area">
         <label
             :for="props.inputName"
             :class="`input-label ${props.extraClassName}`"
@@ -31,10 +32,11 @@ export default defineComponent({
         </label>
         <input
             :type="props.typeName"
-            :class="`input-form ${props.extraClassName}`"
+            :class="`input-section ${props.extraClassName}`"
             :placeholder="props.placeholderString"
             :name="props.inputName"
             :value="props.inputValue"
+            :id="props.idName"
         />
     </div>
 </template>
@@ -44,11 +46,14 @@ export default defineComponent({
 @layer components {
     body {
         .input {
-            &-section {
+            &-area {
                 @apply w-4/5 flex items-center;
             }
+            &-section {
+                @apply w-4/5;
+            }
             &-label {
-                @apply text-black mr-2 font-serif;
+                @apply text-black font-bold capitalize font-serif;
             }
             &-form {
                 @apply flex-shrink-0 flex ml-1;

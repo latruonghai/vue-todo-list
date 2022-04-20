@@ -1,14 +1,20 @@
 <script lang="ts">
 import { computed, defineComponent, watch } from '@vue/runtime-core';
 import { TodoListItem } from '../../../typings/store';
-import { useTodoList } from '../../store';
-// import InputForm from './InputForm.vue';
-import { checkExistElement } from '../../utils/handleArray';
-import { toUpperCase, standardizeString } from '../../utils/handleString';
+import { useTodoList, useToggleModal } from '../../store';
+import {
+    toUpperCase,
+    standardizeString,
+    toKebabCase
+} from '../../utils/handleString';
 import InputForm from './InputForm.vue';
+import Button from '../Button.vue';
+import { getElementInputContent } from '../../utils/handleDOM';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
     name: 'Form',
+
     props: {
         itemSelected: {
             type: Object as () => TodoListItem,
@@ -17,28 +23,48 @@ export default defineComponent({
     },
     setup(props) {
         const DONT_RENDER_LABEL = ['todoWorks', 'dayIssue'];
+        const todoList = useTodoList();
+        const { toggleModalAction } = useToggleModal();
+
+        // console.log("Item selected", props.itemSelected);
+        const { todoListArray, updateTodoListItem, setCurrentItem } = todoList;
+
         const checkValidLabel = (label: string): boolean => {
             // console.log("label", label);
             return DONT_RENDER_LABEL.includes(label, 0);
+        };
+
+        const onSaveHandler = () => {
+            const textValue = getElementInputContent('todo-works-input');
+
+            const newItem: TodoListItem = {
+                ...props.itemSelected,
+                todoWorks: standardizeString(textValue),
+                dayIssue: props.itemSelected.dayIssue
+            };
+            setCurrentItem(newItem);
+            updateTodoListItem(newItem, props.itemSelected.order as number);
+            alert('Update Successfully');
+
+            toggleModalAction(false);
         };
         const listAccepted = computed(() => {
             return Object.keys(props.itemSelected).filter((label: string) =>
                 checkValidLabel(label)
             );
         });
-        const todoList = useTodoList();
-        // console.log("Item selected", props.itemSelected);
-        const { todoListArray } = todoList;
 
         return {
             toUpperCase,
             props,
             todoListArray,
             listAccepted,
-            standardizeString
+            standardizeString,
+            toKebabCase,
+            onSaveHandler
         };
     },
-    components: { InputForm }
+    components: { InputForm, Button }
 });
 </script>
 
@@ -47,31 +73,35 @@ export default defineComponent({
         <div class="form-header">
             <h1 class="form-title">This is Form</h1>
         </div>
-        <div
-            class="input-area"
-            v-for="(name, index) in listAccepted"
-            :key="index"
-        >
-            <InputForm
-                :label-name="standardizeString(toUpperCase(name))"
-                :inputValue="(itemSelected[name] as string)"
+
+        <div class="form-body">
+            <div class="input-area">
+                <InputForm
+                    v-for="(name, index) in listAccepted"
+                    :key="index"
+                    :label-name="standardizeString(toUpperCase(name))"
+                    :inputValue="(itemSelected[name] as string)"
+                    :id-name="`${toKebabCase(name)}-input`"
+                />
+            </div>
+        </div>
+        <div class="form-footer">
+            <Button
+                :contentButton="'Save'"
+                :onClickHandler="onSaveHandler"
             />
         </div>
-        <div class="form-body"></div>
     </div>
 </template>
 
-<style
-    lang="scss"
-    scoped
->
+<style lang="scss">
 @tailwind components;
 
 @layer components {
     body {
         .form {
             &-section {
-                @apply w-5/6 overflow-auto flex-col items-center m-2
+                @apply w-5/6 overflow-auto flex-col items-center m-auto
                 border-2 rounded-md;
             }
             &-header {
@@ -79,10 +109,12 @@ export default defineComponent({
             }
             &-title {
                 @apply text-blue-600 font-mono items-start;
-                text-align: left;
             }
             &-body {
                 @apply flex flex-row space-y-4;
+            }
+            &-footer {
+                @apply flex flex-row space-y-4 mt-3 items-center;
             }
         }
     }
