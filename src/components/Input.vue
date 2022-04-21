@@ -3,6 +3,7 @@ import { defineComponent } from '@vue/runtime-core';
 
 // import Vue from 'vue'
 export default defineComponent({
+    inheritAttrs: false,
     props: {
         extraClassName: {
             type: String,
@@ -18,7 +19,7 @@ export default defineComponent({
         },
 
         onChange: {
-            type: Function
+            type: Object as () => (value: Event) => void
         },
         idName: {
             type: String,
@@ -34,14 +35,11 @@ export default defineComponent({
         class="input-section"
         :type="typeName"
         :placeholder="placeHolder"
-        @change="(e) => onChange(e)"
+        @change="onChange"
     />
 </template>
 
-<style
-    lang="scss"
-    scope
->
+<style lang="scss" scope>
 @tailwind components;
 
 @layer components {

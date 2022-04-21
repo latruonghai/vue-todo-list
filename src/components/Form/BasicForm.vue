@@ -10,7 +10,6 @@ import {
 import InputForm from './InputForm.vue';
 import Button from '../Button.vue';
 import { getElementInputContent } from '../../utils/handleDOM';
-import { storeToRefs } from 'pinia';
 
 export default defineComponent({
     name: 'Form',
@@ -22,7 +21,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const DONT_RENDER_LABEL = ['todoWorks', 'dayIssue'];
+        const DONT_RENDER_LABEL = ['todoWorks', 'dayComplete'];
         const todoList = useTodoList();
         const { toggleModalAction } = useToggleModal();
 
@@ -40,7 +39,7 @@ export default defineComponent({
             const newItem: TodoListItem = {
                 ...props.itemSelected,
                 todoWorks: standardizeString(textValue),
-                dayIssue: props.itemSelected.dayIssue
+                dayComplete: props.itemSelected.dayComplete
             };
             setCurrentItem(newItem);
             updateTodoListItem(newItem, props.itemSelected.order as number);
@@ -86,10 +85,7 @@ export default defineComponent({
             </div>
         </div>
         <div class="form-footer">
-            <Button
-                :contentButton="'Save'"
-                :onClickHandler="onSaveHandler"
-            />
+            <Button :contentButton="'Save'" :onClickHandler="onSaveHandler" />
         </div>
     </div>
 </template>

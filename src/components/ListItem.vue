@@ -8,8 +8,10 @@ import { dayFrom, getRelativeDay } from '../utils/handleDate';
 import { computed, defineComponent } from '@vue/runtime-core';
 import { TodoListItem } from '../../typings/store';
 import { useToggleModal, useTodoList } from '../store';
+import { findIndexObjectByProperties } from '../utils/handleCollection';
 
 export default defineComponent({
+    inheritAttrs: false,
     props: {
         itemContent: {
             type: Object as () => TodoListItem,
@@ -18,7 +20,8 @@ export default defineComponent({
                 return value.length > 0;
             }
         },
-        order: Number
+        order: Number,
+        idName: String
     },
     components: {
         Button,
@@ -29,18 +32,21 @@ export default defineComponent({
         const toggleModal = useToggleModal();
         const { toggleModalAction } = toggleModal;
         const { removeTodoItem, setDoneItem, setCurrentItem } = todoListStore;
-        const removeItemHandler = () => {
-            const item = todoListStore.todoListArray[props.order as number];
-            removeTodoItem(item);
-        };
-        const setDoneItemHandler = () => {
-            const item = todoListStore.todoListArray[props.order as number];
+        const indexOfElement = computed(() => {
+            return findIndexObjectByProperties(todoListStore.todoListArray, {
+                order: props.order
+            });
+        });
 
-            setDoneItem(item);
+        const removeItemHandler = () => {
+            removeTodoItem(indexOfElement.value);
+        };
+
+        const setDoneItemHandler = () => {
+            setDoneItem(indexOfElement.value);
         };
 
         const onClickEdit = () => {
-            // console.log("Curr", props.itemContent);
             setCurrentItem(props.itemContent);
             toggleModalAction(true);
         };
@@ -48,11 +54,11 @@ export default defineComponent({
             return props.itemContent.done ? 'done' : '';
         });
         const todoInformation = computed(() => {
-            return `${props.itemContent.todoWorks} on ${props.itemContent.dayIssue}`;
+            return `${props.itemContent.todoWorks} on ${props.itemContent.dayComplete}`;
         });
         const dayExpiration = computed(() => {
             const dayString = (<TodoListItem>props.itemContent)
-                .dayIssue as string;
+                .dayComplete as string;
 
             const dayRelative = getRelativeDay(dayFrom(dayString));
             // const dayCreated = normalizeDate(dayString);
@@ -76,11 +82,7 @@ export default defineComponent({
     <div class="work-counter">
         <span>{{ itemContent.numOfWorks }}</span>
     </div>
-    <div
-        :id="`cart-${order}`"
-        :title="todoInformation"
-        class="cart-item"
-    >
+    <div :id="`cart-${order}`" :title="todoInformation" class="cart-item">
         <!-- <input :type="'checkbox'" v-model="getStatus" @change="
         "/> -->
         <p :class="`cart-content ${doneStatus}`">

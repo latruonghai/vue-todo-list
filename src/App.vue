@@ -5,23 +5,44 @@
 import TodoList from './components/TodoList.vue';
 import BasicForm from './components/Form/BasicForm.vue';
 // import useToggleModal from './store';
-import { useToggleModal } from './store';
+import { useTodoList, useToggleModal } from './store';
 import Modal from './components/Modal.vue';
-import { defineComponent } from '@vue/runtime-core';
+import Button from './components/Button.vue';
+import { computed, defineComponent, ref } from '@vue/runtime-core';
+import { storeToRefs } from 'pinia';
+import { filterObject } from './utils/handleCollection';
 // import useToggleModal from './store/toggleModal';
 // import TodoList from './components/TodoList.vue';
 export default defineComponent({
     components: {
         TodoList,
         Modal,
+        Button,
         BasicForm
     },
     setup() {
         // provide("store", {methods, state});
         const toggleModal = useToggleModal();
+        const todoListItem = useTodoList();
 
+        const { todoListArray } = storeToRefs(todoListItem);
+        const completedState = ref(true);
+        const worksCompleted = computed(() => {
+            return filterObject(todoListArray.value, function (o: any) {
+                return o.done === true;
+            });
+        });
+
+        const onClickCompleted = () => {
+            console.log('onClickCompleted', completedState.value);
+            completedState.value = !completedState.value;
+        };
         return {
-            toggleModal
+            toggleModal,
+            todoListArray: todoListArray.value,
+            onClickCompleted,
+            completedState,
+            worksCompleted
         };
     }
 });
@@ -30,8 +51,23 @@ export default defineComponent({
 <template>
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-    <todo-list />
-    
+    <todo-list v-if="!completedState" :itemArray="todoListArray">
+        <template #footer>
+            <Button
+                contentButton="Uncompleted"
+                :onClickHandler="onClickCompleted"
+            />
+        </template>
+    </todo-list>
+
+    <todo-list v-else :itemArray="worksCompleted">
+        <template #footer>
+            <Button
+                contentButton="Completed"
+                :onClickHandler="onClickCompleted"
+            ></Button>
+        </template>
+    </todo-list>
 </template>
 
 <style>

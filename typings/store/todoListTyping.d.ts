@@ -3,7 +3,7 @@ interface TodoListItem {
     numOfWorks?: number;
     done?: boolean;
     dayCreated?: string;
-    dayIssue?: string;
+    dayComplete?: string;
     order?: number;
     timeStamp?: number;
 }

@@ -16,7 +16,7 @@ const useTodoList = defineStore('todoListItem', {
                 numOfWorks: 0,
                 done: false,
                 dayCreated: getToday(),
-                dayIssue: '',
+                dayComplete: '',
                 order: 0,
                 timeStamp: Date.now()
             }
@@ -45,13 +45,12 @@ const useTodoList = defineStore('todoListItem', {
             }
         },
 
-        removeTodoItem(todoItem: TodoListItem): void {
-            this.todoListArray.splice(this.todoListArray.indexOf(todoItem), 1);
+        removeTodoItem(index: number): void {
+            this.todoListArray.splice(index, 1);
         },
-        setDoneItem(todoItem: TodoListItem): void {
-            const stateItem = todoItem.done;
-            this.todoListArray[this.todoListArray.indexOf(todoItem)].done =
-                !stateItem;
+        setDoneItem(index: number): void {
+            const stateItem = this.todoListArray[index].done as boolean;
+            this.todoListArray[index].done = !stateItem;
         },
         setCurrentItem(todoItem: TodoListItem): void {
             this.currentItem = todoItem;

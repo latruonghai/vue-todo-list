@@ -1,15 +1,21 @@
 <script lang="ts">
 export default {
-    emits: ['inFocus', 'submit'],
-    setup(props: any, ctx: any) {
-        ctx.emit('submit');
+    setup(props: any, context: any) {
+        // Attributes (Non-reactive object, equivalent to $attrs)
+        console.log(context.attrs);
+
+        // Slots (Non-reactive object, equivalent to $slots)
+        console.log(context.slots);
+
+        // Emit events (Function, equivalent to $emit)
+        console.log(context.emit);
+
+        // Expose public properties (Function)
+        console.log(context.expose);
     }
 };
 </script>
 
 <template>
-    <!-- In CustomComponent -->
-    <button @click="$emit('increaseBy', 1)">Increase by 1</button>
-    <!-- CustomComponent -->
-    <CustomComponent @increase-by="(n) => (count += n)" />
+    <div v-demo="{ color: 'white', text: 'hello!' }"></div>
 </template>

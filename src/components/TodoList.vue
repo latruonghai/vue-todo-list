@@ -15,10 +15,7 @@
                             :idName="'todo-item-content'"
                             placeHolder="Add Todo"
                         />
-                        <Input
-                            typeName="date"
-                            idName="todo-item-date"
-                        />
+                        <Input typeName="date" idName="todo-item-date" />
                         <Button
                             contentButton="Add"
                             :extraClassName="'add'"
@@ -30,11 +27,15 @@
                         <ListItem
                             v-for="(item, index) in arrayCart"
                             :key="index"
+                            :idName="`cart-${item.order}`"
                             :itemContent="item"
                             :done="item.done"
                             :order="item.order"
                         />
                     </div>
+                </div>
+                <div class="todo-list-foote">
+                    <slot v-if="isHasItem" name="footer"></slot>
                 </div>
             </div>
         </div>
@@ -42,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 // import my-button from '../components/my-button.vue';
 import Input from './Input.vue';
 import ListItem from './ListItem.vue';
@@ -61,9 +62,11 @@ import { getElementInputContent } from '../utils/handleDOM';
 import Modal from './Modal.vue';
 import BasicForm from './Form/BasicForm.vue';
 import { storeToRefs } from 'pinia';
+import { filterObject } from '../utils/handleCollection';
 
 export default defineComponent({
     name: 'TodoList',
+    inheritAttrs: false,
     components: {
         // my-button,
         Input,
@@ -78,14 +81,14 @@ export default defineComponent({
             default: () => []
         }
     },
-    setup() {
+    setup({ itemArray }) {
         const stateTodoList = useTodoList();
         const today = getToday();
         const { addTodoItem } = stateTodoList;
-        const { currentItem } = storeToRefs(stateTodoList);
+        const { currentItem, todoListArray } = storeToRefs(stateTodoList);
         // console.log('current', currentItem);
         const arrayCart = computed(() => {
-            const arr = sortByDay(stateTodoList.todoListArray);
+            const arr = sortByDay(itemArray);
 
             return arr;
         });
@@ -94,7 +97,7 @@ export default defineComponent({
             const content = getElementInputContent('todo-item-content');
             const dateValueContent = getElementInputContent('todo-item-date');
 
-            const dayIssue =
+            const dayComplete =
                 (dateValueContent && normalizeDate(dateValueContent)) || today;
 
             if (content.length > 0) {
@@ -108,20 +111,24 @@ export default defineComponent({
                             'todoWorks'
                         ) + 1,
                     dayCreated: today,
-                    dayIssue: dayIssue,
+                    dayComplete: dayComplete,
                     order: todoListArrayLength.value,
                     // : getToday(),
-                    timeStamp: toTimeStamp(dayIssue)
+                    timeStamp: toTimeStamp(dayComplete)
                 };
 
                 addTodoItem(item);
             }
         };
 
+        const isHasItem = computed((): boolean => {
+            return todoListArray.value.length > 0;
+        });
+
         const toggleModal = useToggleModal();
 
         const todoListArrayLength = computed(() => {
-            return stateTodoList.todoListArray.length;
+            return itemArray.length;
         });
 
         return {
@@ -131,7 +138,8 @@ export default defineComponent({
             todoListArrayLength,
             toggleModal,
             currentItem: currentItem.value,
-            today
+            today,
+            isHasItem
         };
     }
 });

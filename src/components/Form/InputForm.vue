@@ -13,7 +13,10 @@ export default defineComponent({
         inputType: String,
         inputName: String,
         typeName: String,
-        inputValue: Object as () => String,
+        inputValue: {
+            type: String,
+            default: ''
+        },
         idName: String
     },
 
