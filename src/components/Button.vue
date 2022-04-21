@@ -47,7 +47,7 @@ export default defineComponent({
         .btn {
             @apply flex-shrink-0 p-2 border-blue-400 bg-white text-blue-400
             rounded-md cursor-pointer hover:bg-blue-400 hover:border-blue-600 
-            hover:text-white hover:font-bold;
+            hover:text-white hover:font-bold ml-2;
         }
         .add {
             @apply text-teal-300 border-teal-400 hover:text-teal-400 
@@ -58,6 +58,14 @@ export default defineComponent({
             hover:text-white bg-white hover:font-bold hover:bg-green-600 ml-4 mr-2;
         }
         .remove {
+            @apply border-red-500 bg-white text-red-500 hover:font-bold
+            hover:border-red-600 hover:bg-red-500 hover:text-white hover:shadow-lg;
+        }
+        .uncompleted {
+            @apply border-gray-500 bg-white text-gray-500 hover:font-bold
+            hover:border-gray-600 hover:bg-gray-500 hover:text-white hover:shadow-lg;
+        }
+        .completed {
             @apply border-red-500 bg-white text-red-500 hover:font-bold
             hover:border-red-600 hover:bg-red-500 hover:text-white hover:shadow-lg;
         }

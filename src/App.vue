@@ -5,12 +5,13 @@
 import TodoList from './components/TodoList.vue';
 import BasicForm from './components/Form/BasicForm.vue';
 // import useToggleModal from './store';
-import { useTodoList, useToggleModal } from './store';
+import { useCompletedToDoItem, useTodoList, useToggleModal } from './store';
 import Modal from './components/Modal.vue';
 import Button from './components/Button.vue';
-import { computed, defineComponent, ref } from '@vue/runtime-core';
+import { computed, defineComponent, ref, watch } from '@vue/runtime-core';
 import { storeToRefs } from 'pinia';
 import { filterObject } from './utils/handleCollection';
+import { TodoListItem } from '../typings/store';
 // import useToggleModal from './store/toggleModal';
 // import TodoList from './components/TodoList.vue';
 export default defineComponent({
@@ -24,25 +25,30 @@ export default defineComponent({
         // provide("store", {methods, state});
         const toggleModal = useToggleModal();
         const todoListItem = useTodoList();
-
+        const todoItemState = useCompletedToDoItem();
         const { todoListArray } = storeToRefs(todoListItem);
-        const completedState = ref(true);
+        const { filterTodoList } = storeToRefs(todoItemState);
+        // const item = ref<TodoListItem>();
+        // const item = ref<TodoListItem[]>(todoListArray.value);y
+        // const completedState = ref(false);
         const worksCompleted = computed(() => {
             return filterObject(todoListArray.value, function (o: any) {
                 return o.done === true;
             });
         });
 
-        const onClickCompleted = () => {
-            console.log('onClickCompleted', completedState.value);
-            completedState.value = !completedState.value;
-        };
+        const unCompletedWorks = computed(() => {
+            return filterObject(todoListArray.value, function (o: any) {
+                return o.done === false;
+            });
+        });
+        // watch
         return {
             toggleModal,
             todoListArray: todoListArray.value,
-            onClickCompleted,
-            completedState,
-            worksCompleted
+            completedState: filterTodoList,
+            worksCompleted,
+            unCompletedWorks
         };
     }
 });
@@ -51,23 +57,21 @@ export default defineComponent({
 <template>
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" /> -->
-    <todo-list v-if="!completedState" :itemArray="todoListArray">
-        <template #footer>
-            <Button
-                contentButton="Uncompleted"
-                :onClickHandler="onClickCompleted"
-            />
-        </template>
+    <todo-list v-if="completedState === 1" :itemArray="worksCompleted">
     </todo-list>
 
-    <todo-list v-else :itemArray="worksCompleted">
+    <todo-list v-else-if="completedState === 0" :itemArray="unCompletedWorks">
+    </todo-list>
+    <todo-list v-else :itemArray="todoListArray"> </todo-list>
+
+    <!-- <todo-list v-else-if="" :itemArray="todoListArray">
         <template #footer>
             <Button
-                contentButton="Completed"
+                contentButton="Completed Works"
                 :onClickHandler="onClickCompleted"
             ></Button>
         </template>
-    </todo-list>
+    </todo-list> -->
 </template>
 
 <style>

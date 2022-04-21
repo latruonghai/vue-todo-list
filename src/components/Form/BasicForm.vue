@@ -10,6 +10,7 @@ import {
 import InputForm from './InputForm.vue';
 import Button from '../Button.vue';
 import { getElementInputContent } from '../../utils/handleDOM';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
     name: 'Form',
@@ -21,7 +22,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const DONT_RENDER_LABEL = ['todoWorks', 'dayComplete'];
+        const DONT_RENDER_LABEL = ['todoWorks', 'dayIssue'];
         const todoList = useTodoList();
         const { toggleModalAction } = useToggleModal();
 

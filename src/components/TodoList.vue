@@ -34,8 +34,25 @@
                         />
                     </div>
                 </div>
-                <div class="todo-list-foote">
-                    <slot v-if="isHasItem" name="footer"></slot>
+                <div class="todo-list-footer">
+                    <slot v-if="isHasItem" name="footer">
+                        <Button
+                            extraClassName="show-all"
+                            contentButton="All Works"
+                            :onClickHandler="() => onClickCompleted(-1)"
+                        />
+
+                        <Button
+                            extraClassName="completed"
+                            contentButton="Completed Works"
+                            :onClickHandler="() => onClickCompleted(1)"
+                        />
+                        <Button
+                            extraClassName="uncompleted"
+                            contentButton="Uncompleted Works"
+                            :onClickHandler="() => onClickCompleted(0)"
+                        />
+                    </slot>
                 </div>
             </div>
         </div>
@@ -43,13 +60,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, PropType, ref, watch } from 'vue';
 // import my-button from '../components/my-button.vue';
 import Input from './Input.vue';
 import ListItem from './ListItem.vue';
 import Button from './Button.vue';
 import { TodoListItem } from '../../typings/store';
-import { useTodoList, useToggleModal } from '../store';
+import { useCompletedToDoItem, useTodoList, useToggleModal } from '../store';
 import { numberOfExistObjectElement } from '../utils/handleArray';
 import {
     getToday,
@@ -62,7 +79,6 @@ import { getElementInputContent } from '../utils/handleDOM';
 import Modal from './Modal.vue';
 import BasicForm from './Form/BasicForm.vue';
 import { storeToRefs } from 'pinia';
-import { filterObject } from '../utils/handleCollection';
 
 export default defineComponent({
     name: 'TodoList',
@@ -83,13 +99,20 @@ export default defineComponent({
     },
     setup({ itemArray }) {
         const stateTodoList = useTodoList();
-        const today = getToday();
         const { addTodoItem } = stateTodoList;
         const { currentItem, todoListArray } = storeToRefs(stateTodoList);
+
+        const { setFilterState } = useCompletedToDoItem();
+        const today = getToday();
+
+        const onClickCompleted = (value: any) => {
+            // console.log('onClickCompleted', completedState.value);
+            setFilterState(value);
+        };
         // console.log('current', currentItem);
         const arrayCart = computed(() => {
             const arr = sortByDay(itemArray);
-
+            // console.log('arr', arr);
             return arr;
         });
 
@@ -139,7 +162,8 @@ export default defineComponent({
             toggleModal,
             currentItem: currentItem.value,
             today,
-            isHasItem
+            isHasItem,
+            onClickCompleted
         };
     }
 });

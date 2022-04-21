@@ -7,7 +7,7 @@ import Input from './Input.vue';
 import { dayFrom, getRelativeDay } from '../utils/handleDate';
 import { computed, defineComponent } from '@vue/runtime-core';
 import { TodoListItem } from '../../typings/store';
-import { useToggleModal, useTodoList } from '../store';
+import { useToggleModal, useTodoList, useCompletedToDoItem } from '../store';
 import { findIndexObjectByProperties } from '../utils/handleCollection';
 
 export default defineComponent({
@@ -30,6 +30,7 @@ export default defineComponent({
     setup(props: any) {
         const todoListStore = useTodoList();
         const toggleModal = useToggleModal();
+        const { setFilterState } = useCompletedToDoItem();
         const { toggleModalAction } = toggleModal;
         const { removeTodoItem, setDoneItem, setCurrentItem } = todoListStore;
         const indexOfElement = computed(() => {
@@ -40,6 +41,7 @@ export default defineComponent({
 
         const removeItemHandler = () => {
             removeTodoItem(indexOfElement.value);
+            setFilterState(-1);
         };
 
         const setDoneItemHandler = () => {
