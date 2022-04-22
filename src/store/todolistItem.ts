@@ -1,5 +1,5 @@
-import { TodoListItemArray, TodoListItem } from '../../typings/store';
 import { defineStore } from 'pinia';
+import { TodoListItem, TodoListItemArray } from '../../typings/store';
 // import TodoListItemArray
 import {
     checkExistElement,

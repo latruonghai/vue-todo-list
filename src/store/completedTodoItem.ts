@@ -1,5 +1,5 @@
-import { NumberState } from './../../typings/store/index.d';
 import { defineStore } from 'pinia';
+import { NumberState } from './../../typings/store/index.d';
 
 interface StateItem {
     filterTodoList: NumberState;
@@ -13,7 +13,6 @@ export const useCompletedToDoItem = defineStore('completedTodoItem', {
     actions: {
         setFilterState(state: NumberState): void {
             this.filterTodoList = state;
-            console.log('filter', this.filterTodoList);
         }
     }
 });

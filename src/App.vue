@@ -1,19 +1,13 @@
 <script lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-// import HelloWorld from './components/HelloWorld.vue';
-import TodoList from './components/TodoList.vue';
-import BasicForm from './components/Form/BasicForm.vue';
-// import useToggleModal from './store';
-import { useCompletedToDoItem, useTodoList, useToggleModal } from './store';
-import Modal from './components/Modal.vue';
-import Button from './components/Button.vue';
-import { computed, defineComponent, ref, watch } from '@vue/runtime-core';
+import { computed, defineComponent } from '@vue/runtime-core';
 import { storeToRefs } from 'pinia';
+import Button from './components/Button.vue';
+import BasicForm from './components/Form/BasicForm.vue';
+import Modal from './components/Modal.vue';
+import TodoList from './components/TodoList.vue';
+import { useCompletedToDoItem, useTodoList, useToggleModal } from './store';
 import { filterObject } from './utils/handleCollection';
-import { TodoListItem } from '../typings/store';
-// import useToggleModal from './store/toggleModal';
-// import TodoList from './components/TodoList.vue';
+
 export default defineComponent({
     components: {
         TodoList,

@@ -25,7 +25,7 @@ export default defineComponent({
         onClickHandler: {
             type: Function,
             default: () => {
-                console.log('This is button ');
+                console.log('There is no action here.');
             }
         },
         contentButton: {
@@ -74,10 +74,6 @@ export default defineComponent({
         .completed {
             @apply border-red-500 bg-white text-red-500 hover:font-bold
             hover:border-red-600 hover:bg-red-500 hover:text-white hover:shadow-lg;
-        }
-        .selected {
-            @apply bg-orange-500 border-orange-600 text-white font-bold scale-105
-            shadow-lg focus:ring-1;
         }
     }
 }

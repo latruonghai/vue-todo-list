@@ -1,16 +1,16 @@
 <script lang="ts">
-import { computed, defineComponent, watch } from '@vue/runtime-core';
+import { computed, defineComponent } from '@vue/runtime-core';
 import { TodoListItem } from '../../../typings/store';
 import { useTodoList, useToggleModal } from '../../store';
+import { getElementInputContent } from '../../utils/handleDOM';
 import {
-    toUpperCase,
+    checkIfStringHave,
     standardizeString,
     toKebabCase,
-    checkIfStringHave
+    toUpperCase
 } from '../../utils/handleString';
-import InputForm from './InputForm.vue';
 import Button from '../Button.vue';
-import { getElementInputContent } from '../../utils/handleDOM';
+import InputForm from './InputForm.vue';
 
 export default defineComponent({
     name: 'Form',
@@ -22,7 +22,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const DONT_RENDER_LABEL = ['todoWorks', 'dayComplete'];
+        const RENDERED_LABELS = ['todoWorks', 'dayComplete'];
         const todoList = useTodoList();
         const { toggleModalAction } = useToggleModal();
 
@@ -31,7 +31,7 @@ export default defineComponent({
 
         const checkValidLabel = (label: string): boolean => {
             // console.log("label", label);
-            return DONT_RENDER_LABEL.includes(label, 0);
+            return RENDERED_LABELS.includes(label, 0);
         };
 
         const onSaveHandler = () => {

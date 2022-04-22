@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-show="toggleModal.isShow">
+        <Modal v-show="isShow">
             <template #body>
                 <BasicForm :itemSelected="stateTodoList.currentItem" />
             </template>
@@ -41,6 +41,7 @@
                             contentButton="All Works"
                             :onClickHandler="() => onClickCompleted(-1)"
                             :isDisable="matchValue(-1)"
+                            titleString="Show all works"
                         />
 
                         <Button
@@ -48,12 +49,14 @@
                             contentButton="Completed Works"
                             :onClickHandler="() => onClickCompleted(1)"
                             :isDisable="matchValue(1)"
+                            titleString="Show completed works"
                         />
                         <Button
                             extraClassName="uncompleted"
                             contentButton="Uncompleted Works"
                             :onClickHandler="() => onClickCompleted(0)"
                             :isDisable="matchValue(0)"
+                            titleString="Show uncompleted works"
                         />
                     </slot>
                 </div>
@@ -68,8 +71,7 @@ import { computed, defineComponent, PropType } from 'vue';
 import Input from './Input.vue';
 import ListItem from './ListItem.vue';
 import Button from './Button.vue';
-import classNames from 'classnames';
-import { NumberState, TodoListItem } from '../../typings/store';
+import { TodoListItem } from '../../typings/store';
 import { useCompletedToDoItem, useTodoList, useToggleModal } from '../store';
 import { numberOfExistObjectElement } from '../utils/handleArray';
 import {
@@ -102,6 +104,7 @@ export default defineComponent({
         }
     },
     setup({ itemArray }) {
+        const { isShow } = storeToRefs(useToggleModal());
         const stateTodoList = useTodoList();
         const { addTodoItem } = stateTodoList;
         const { currentItem, todoListArray } = storeToRefs(stateTodoList);
@@ -111,7 +114,6 @@ export default defineComponent({
         const today = getToday();
 
         const onClickCompleted = (value: any) => {
-            // console.log('onClickCompleted', completedState.value);
             setFilterState(value);
         };
 
@@ -120,31 +122,9 @@ export default defineComponent({
         };
         // console.log('current', currentItem);
         const arrayCart = computed(() => {
-            const arr = sortByDay(itemArray);
-            // console.log('arr', arr);
-            return arr;
+            return sortByDay(itemArray);
         });
-        const generateClassName = (filterState: NumberState) => {
-            let class_name;
 
-            switch (filterState) {
-                case -1:
-                    class_name = 'show-all';
-                    break;
-                case 0:
-                    class_name = 'uncompleted';
-                    break;
-                case 1:
-                    class_name = 'completed';
-                    break;
-                default:
-                    class_name = 'show-all';
-                    break;
-            }
-            return classNames(class_name, {
-                selected: filterTodoList.value === filterState
-            });
-        };
         const addTodoHandler = () => {
             const content = getElementInputContent('todo-item-content');
             const dateValueContent = getElementInputContent('todo-item-date');
@@ -170,17 +150,16 @@ export default defineComponent({
                 };
 
                 addTodoItem(item);
+                setFilterState(-1);
             }
         };
 
         const isHasItem = computed((): boolean => {
-            return todoListArray.value.length > 0;
+            return todoListArrayLength.value > 0;
         });
 
-        const toggleModal = useToggleModal();
-
         const todoListArrayLength = computed(() => {
-            return itemArray.length;
+            return todoListArray.value.length;
         });
 
         return {
@@ -188,12 +167,11 @@ export default defineComponent({
             addTodoHandler,
             arrayCart,
             todoListArrayLength,
-            toggleModal,
+            isShow,
             currentItem: currentItem.value,
             today,
             isHasItem,
             onClickCompleted,
-            generateClassName,
             matchValue
         };
     }
@@ -229,7 +207,7 @@ export default defineComponent({
             }
         }
         .cart-section {
-            @apply m-4 flex-col shadow-lg;
+            @apply m-4 flex-col shadow-lg overflow-auto;
         }
     }
 }

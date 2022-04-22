@@ -1,14 +1,13 @@
 <script lang="ts">
 // import useTodoList from '../store/todolistItem';
+import { computed, defineComponent } from '@vue/runtime-core';
+import { TodoListItem } from '../../typings/store';
+import { useCompletedToDoItem, useTodoList, useToggleModal } from '../store';
+import { findIndexObjectByProperties } from '../utils/handleCollection';
+import { dayFrom, getRelativeDay } from '../utils/handleDate';
 import Button from './Button.vue';
 // import produce from "immer";
 import Input from './Input.vue';
-
-import { dayFrom, getRelativeDay } from '../utils/handleDate';
-import { computed, defineComponent } from '@vue/runtime-core';
-import { TodoListItem } from '../../typings/store';
-import { useToggleModal, useTodoList, useCompletedToDoItem } from '../store';
-import { findIndexObjectByProperties } from '../utils/handleCollection';
 
 export default defineComponent({
     inheritAttrs: false,
