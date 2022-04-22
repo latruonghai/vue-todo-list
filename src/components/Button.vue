@@ -7,6 +7,7 @@
         "
         :class="'btn ' + extraClassName"
         :title="titleString"
+        :disabled="isDisable"
     >
         {{ contentButton }}
     </button>
@@ -34,6 +35,10 @@ export default defineComponent({
         titleString: {
             type: String,
             default: 'Hello'
+        },
+        isDisable: {
+            type: Boolean,
+            default: false
         }
     }
 });
@@ -47,7 +52,8 @@ export default defineComponent({
         .btn {
             @apply flex-shrink-0 p-2 border-blue-400 bg-white text-blue-400
             rounded-md cursor-pointer hover:bg-blue-400 hover:border-blue-600 
-            hover:text-white hover:font-bold ml-2;
+            hover:text-white hover:font-bold ml-2 disabled:hover:bg-orange-500
+            disabled:bg-orange-500 disabled:text-white disabled:font-bold disabled:scale-105;
         }
         .add {
             @apply text-teal-300 border-teal-400 hover:text-teal-400 
@@ -68,6 +74,10 @@ export default defineComponent({
         .completed {
             @apply border-red-500 bg-white text-red-500 hover:font-bold
             hover:border-red-600 hover:bg-red-500 hover:text-white hover:shadow-lg;
+        }
+        .selected {
+            @apply bg-orange-500 border-orange-600 text-white font-bold scale-105
+            shadow-lg focus:ring-1;
         }
     }
 }

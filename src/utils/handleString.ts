@@ -24,3 +24,7 @@ export const checkIfStringIncludes = (str: string) => {};
 export const toKebabCase = (str: string): string => {
     return _.kebabCase(str);
 };
+
+export function checkIfStringHave(str: string, subStr: string): boolean {
+    return _.includes(str, subStr);
+}

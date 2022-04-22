@@ -40,17 +40,20 @@
                             extraClassName="show-all"
                             contentButton="All Works"
                             :onClickHandler="() => onClickCompleted(-1)"
+                            :isDisable="matchValue(-1)"
                         />
 
                         <Button
                             extraClassName="completed"
                             contentButton="Completed Works"
                             :onClickHandler="() => onClickCompleted(1)"
+                            :isDisable="matchValue(1)"
                         />
                         <Button
                             extraClassName="uncompleted"
                             contentButton="Uncompleted Works"
                             :onClickHandler="() => onClickCompleted(0)"
+                            :isDisable="matchValue(0)"
                         />
                     </slot>
                 </div>
@@ -60,12 +63,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, watch } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 // import my-button from '../components/my-button.vue';
 import Input from './Input.vue';
 import ListItem from './ListItem.vue';
 import Button from './Button.vue';
-import { TodoListItem } from '../../typings/store';
+import classNames from 'classnames';
+import { NumberState, TodoListItem } from '../../typings/store';
 import { useCompletedToDoItem, useTodoList, useToggleModal } from '../store';
 import { numberOfExistObjectElement } from '../utils/handleArray';
 import {
@@ -101,13 +105,18 @@ export default defineComponent({
         const stateTodoList = useTodoList();
         const { addTodoItem } = stateTodoList;
         const { currentItem, todoListArray } = storeToRefs(stateTodoList);
-
-        const { setFilterState } = useCompletedToDoItem();
+        const completeTodoList = useCompletedToDoItem();
+        const { setFilterState } = completeTodoList;
+        const { filterTodoList } = storeToRefs(completeTodoList);
         const today = getToday();
 
         const onClickCompleted = (value: any) => {
             // console.log('onClickCompleted', completedState.value);
             setFilterState(value);
+        };
+
+        const matchValue = (value: any) => {
+            return filterTodoList.value === value;
         };
         // console.log('current', currentItem);
         const arrayCart = computed(() => {
@@ -115,7 +124,27 @@ export default defineComponent({
             // console.log('arr', arr);
             return arr;
         });
+        const generateClassName = (filterState: NumberState) => {
+            let class_name;
 
+            switch (filterState) {
+                case -1:
+                    class_name = 'show-all';
+                    break;
+                case 0:
+                    class_name = 'uncompleted';
+                    break;
+                case 1:
+                    class_name = 'completed';
+                    break;
+                default:
+                    class_name = 'show-all';
+                    break;
+            }
+            return classNames(class_name, {
+                selected: filterTodoList.value === filterState
+            });
+        };
         const addTodoHandler = () => {
             const content = getElementInputContent('todo-item-content');
             const dateValueContent = getElementInputContent('todo-item-date');
@@ -163,7 +192,9 @@ export default defineComponent({
             currentItem: currentItem.value,
             today,
             isHasItem,
-            onClickCompleted
+            onClickCompleted,
+            generateClassName,
+            matchValue
         };
     }
 });
@@ -192,9 +223,7 @@ export default defineComponent({
             &-input-section {
                 @apply flex mt-1;
             }
-            // &-input-area{
-            //     @apply shadow-lg border-2 appearance-none border rounded w-full py-2 px-3 mr-4 text-gray-500 border-gray-400;
-            // }
+
             &-button {
                 @apply ml-2 rounded-xl bg-white border-teal-400 text-teal-600 cursor-pointer flex-shrink-0 p-2 hover:text-teal-800 hover:border-teal-600;
             }

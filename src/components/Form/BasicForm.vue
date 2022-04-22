@@ -5,12 +5,12 @@ import { useTodoList, useToggleModal } from '../../store';
 import {
     toUpperCase,
     standardizeString,
-    toKebabCase
+    toKebabCase,
+    checkIfStringHave
 } from '../../utils/handleString';
 import InputForm from './InputForm.vue';
 import Button from '../Button.vue';
 import { getElementInputContent } from '../../utils/handleDOM';
-import { storeToRefs } from 'pinia';
 
 export default defineComponent({
     name: 'Form',
@@ -22,7 +22,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const DONT_RENDER_LABEL = ['todoWorks', 'dayIssue'];
+        const DONT_RENDER_LABEL = ['todoWorks', 'dayComplete'];
         const todoList = useTodoList();
         const { toggleModalAction } = useToggleModal();
 
@@ -48,6 +48,9 @@ export default defineComponent({
 
             toggleModalAction(false);
         };
+        const checkDayString = (strDay: string) => {
+            return checkIfStringHave(strDay, 'day');
+        };
         const listAccepted = computed(() => {
             return Object.keys(props.itemSelected).filter((label: string) =>
                 checkValidLabel(label)
@@ -61,7 +64,8 @@ export default defineComponent({
             listAccepted,
             standardizeString,
             toKebabCase,
-            onSaveHandler
+            onSaveHandler,
+            checkDayString
         };
     },
     components: { InputForm, Button }
